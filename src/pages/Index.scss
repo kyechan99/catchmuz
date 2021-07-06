@@ -1,0 +1,40 @@
+@import '/src/_variables.scss';
+
+.index-page {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+.index-title {
+    margin-bottom: 0px;
+    &.title-1 {
+        padding-top: 5rem;
+        font-size: 5rem;
+        line-height: 5rem;
+    }
+    &.title-2 {
+        font-size: 4rem;
+        line-height: 4rem;
+    }
+}
+
+.input-nickname {
+    margin-top: 5rem;
+    padding: .5rem .75rem;
+    // height: 1.5rem;
+    font-size: 1rem;
+    color: white;
+
+    background: rgba( 255, 255, 255, 0.35 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 5.5px );
+    -webkit-backdrop-filter: blur( 5.5px );
+    border-radius: .5rem;
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    &:focus {
+        background: rgba( 255, 255, 255, 0.5 );
+    }
+}

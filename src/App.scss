@@ -1,0 +1,19 @@
+@import '/src/_variables.scss';
+
+
+.App {
+  color: white;
+  height: 100vh;
+  background-color: #1b1c20;
+  background: radial-gradient($week-bg-color, $bg-color);
+}
+
+h1 {
+  margin-top: 0px;
+}
+
+button, a, input {
+  &:focus {
+      outline: none;
+  }
+}
