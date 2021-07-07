@@ -1,11 +1,17 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../modules';
+
 const Lobby = () => {
+    const user = useSelector((state: RootState) => state.user);
+
     return (
         <div>
             <h1>Lobby page</h1>
-
+            { user.nickname }
+            { user.profile }
             <iframe 
                 id="player" 
                 width="560" height="315" 

@@ -1,21 +1,40 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import './Index.scss';
 
-import { PrimaryButton, PointButton } from '../components/Button';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../modules';
+import { setNickname, setProfile } from '../modules/user';
+
+import { PrimaryButton, } from '../components/Button/Button';
+import { InputNickname } from '../components/Input/Input';
 
 const Index = () => {
+    const user = useSelector((state: RootState) => state.user);
+    const dispatch = useDispatch();
+
+    const [nickname, setNickname] = React.useState('');
+    const history = useHistory();
+
+    function goToLobby() {
+        console.log(nickname);
+        if (nickname == '')
+            return;
+        dispatch({type : 'user/NICKNAME', payload: nickname});
+        // dispatch(setNickname(nickname));
+        history.push('/lobby');    
+    }
+
     return (
         <div className="index-page">
             <h1 className="index-title title-1">CATCH</h1>
-            <h1 className="index-title title-2">SONG</h1>
+            <h1 className="index-title title-2">MUZ</h1>
 
-            <input className="input-nickname" />
-            <Link to="/lobby">
-                <PrimaryButton clicked={() => { console.log('시작 ! '); }}>시작</PrimaryButton>
-            </Link>
+            <InputNickname onChange={setNickname}></InputNickname>
 
-            <PointButton clicked={() => {}}>종료하기</PointButton>
+            <br/>
+                        
+            <PrimaryButton clicked={goToLobby}>시작</PrimaryButton>
         </div>
     )
 }

@@ -5,7 +5,6 @@ import './App.scss';
 import Index from './pages/Index';
 import Lobby from './pages/Lobby';
 
-
 import { Route } from 'react-router-dom';
 
 function App() {
