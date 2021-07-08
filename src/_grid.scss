@@ -1,0 +1,228 @@
+// Grid
+$MAX-COLUMNS: 12;
+
+// Responsive breakpoints
+$SM-WIDTH: 576px;
+$MD-WIDTH: 768px;
+$LG-WIDTH: 992px;
+$XL-WIDTH: 1200px;
+
+$container-padding: 1rem;
+$container-sm-width: 544px;
+$container-md-width: 736px;
+$container-width: 960px;
+$container-xl-width: 1168px;
+$column-padding: 1rem;
+
+// Container
+@mixin container-box {
+	width: 100%;
+	// position: relative;
+	padding-left: $container-padding;
+	padding-right: $container-padding;
+}
+.container-fluid {
+	@include container-box;
+}
+.container, .container-xl, .container-lg, .container-md, .container-sm {
+    padding-top: 2rem;
+	margin-left: auto;
+	margin-right: auto;
+	@include container-box;
+}
+@media (min-width: $SM-WIDTH) {
+	.container, .container-sm {
+		max-width: $container-sm-width;
+	}
+}
+@media (min-width: $MD-WIDTH) {
+	.container, .container-md, .container-sm {
+		max-width: $container-md-width;
+	}
+}
+@media (min-width: $LG-WIDTH) {
+	.container, .container-lg, .container-md, .container-sm {
+		max-width: $container-width;
+	}
+}
+@media (min-width: $XL-WIDTH) {
+	.container, .container-xl, .container-lg, .container-md, .container-sm {
+		max-width: $container-xl-width;
+	}
+}
+// Grid
+@mixin base-column ($i) {
+	position: relative;
+	padding-left: $column-padding;
+	padding-right: $column-padding;
+}
+@mixin flex-column ($i) {
+	flex: 0 0 percentage($i / $MAX-COLUMNS);
+	max-width : percentage($i / $MAX-COLUMNS);
+}
+
+.row {
+	display: flex;
+	position: relative;
+	margin-left: -$container-padding;
+	margin-right: -$container-padding;
+	// justify-content: space-between;
+	// text-align: center;
+	flex-wrap: wrap;	
+}
+/**
+ *	.col
+ *	@desc: auto sizing
+ */
+.col {
+	position: relative;
+	padding-left: $column-padding;
+	padding-right: $column-padding;
+	flex: 1 1 0;
+}
+.col-sm, .col-md, .col-lg, .col-xl {
+	width: 100%;
+	padding-left: $column-padding;
+	padding-right: $column-padding;
+}
+@for $i from 1 through $MAX-COLUMNS {
+	/**
+	 *	.col-*
+	 *	@desc: None-Responsive sizing. Based on flex
+	 */
+	.col-#{$i} {
+		@include base-column($i);
+		@include flex-column($i);
+	}
+	/**
+	 *	.col-sm-*
+	 *	@desc: Responsive sizing on SM-WIDTH
+	 */
+	.col-sm-#{$i} {
+		width: 100%;
+		@include base-column($i);
+	}
+	
+	/**
+	 *	.col-md-*
+	 *	@desc: Responsive sizing on MD-WIDTH
+	 */
+	.col-md-#{$i} {
+		width: 100%;
+		@include base-column($i);
+	}
+	/**
+	 *	.col-lg-*
+	 */
+	.col-lg-#{$i} {
+		width: 100%;
+		@include base-column($i);
+	}
+	/**
+	 *	.col-xl-*
+	 *	@desc: Responsive sizing on XL-WIDTH
+	 */
+	.col-xl-#{$i} {
+		width: 100%;
+		@include base-column($i);
+	}
+}
+
+/**
+ *	Use Responsive Simple column
+ *	@desc: Using .col-sm, .col-md, .col-lg, .col-xl
+ */
+@mixin responsive-column {
+	flex-basis: 0;
+	flex-grow: 1;
+	min-width: 0;
+	max-width: 100%;
+}
+
+@media (min-width: $SM-WIDTH) {
+	.col-sm {
+		@include responsive-column;
+	}
+	@for $i from 1 through $MAX-COLUMNS {
+		.col-sm-#{$i} {
+			@include flex-column($i);
+		}
+	}
+}
+@media (min-width: $MD-WIDTH) {
+	.col-md {
+		@include responsive-column;
+	}
+	@for $i from 1 through $MAX-COLUMNS {
+		.col-md-#{$i} {
+			@include flex-column($i);
+		}
+	}
+}
+@media (min-width: $LG-WIDTH) {
+	.col-lg {
+		@include responsive-column;
+	}
+	@for $i from 1 through $MAX-COLUMNS {
+		.col-lg-#{$i} {
+			@include flex-column($i);
+		}
+	}
+}
+@media (min-width: $XL-WIDTH) {
+	.col-xl {
+		@include responsive-column;
+	}
+	@for $i from 1 through $MAX-COLUMNS {
+		.col-xl-#{$i} {
+			@include flex-column($i);
+		}
+	}
+}
+
+/**
+ *	Order
+ */
+.order-first { order: -1; }
+.order-last { order: $MAX-COLUMNS + 1; }
+@for $i from 1 through $MAX-COLUMNS {
+	.order-#{$i} {
+		order: $i;
+	}
+}
+@media (min-width: $SM-WIDTH) {
+	.order-sm-first { order: -1; }
+	.order-sm-last { order: $MAX-COLUMNS + 1; }
+	@for $i from 1 through $MAX-COLUMNS {
+		.order-sm-#{$i} {
+			order: $i;
+		}
+	}
+}
+@media (min-width: $MD-WIDTH) {
+	.order-md-first { order: -1; }
+	.order-md-last { order: $MAX-COLUMNS + 1; }
+	@for $i from 1 through $MAX-COLUMNS {
+		.order-md-#{$i} {
+			order: $i;
+		}
+	}
+}
+@media (min-width: $LG-WIDTH) {
+	.order-lg-first { order: -1; }
+	.order-lg-last { order: $MAX-COLUMNS + 1; }
+	@for $i from 1 through $MAX-COLUMNS {
+		.order-lg-#{$i} {
+			order: $i;
+		}
+	}
+}
+@media (min-width: $XL-WIDTH) {
+	.order-xl-first { order: -1; }
+	.order-xl-last { order: $MAX-COLUMNS + 1; }
+	@for $i from 1 through $MAX-COLUMNS {
+		.order-xl-#{$i} {
+			order: $i;
+		}
+	}
+}

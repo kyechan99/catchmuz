@@ -1,0 +1,25 @@
+@import '/src/variables.scss';
+
+.room {
+    padding: 1rem;
+    background-color: $dark;
+    margin-bottom: 1rem;
+
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    border-radius: 10px;
+    // border: 1px solid rgba( 255, 255, 255, 0.18 );
+    transition: background-color ease .5s;
+    &:hover {
+        background: rgba( 255, 255, 255, 0.4 );
+    }
+    .room-title {
+        margin: 0px;
+        color: white;
+    }
+    .room-member {
+        float: right;
+    }
+}

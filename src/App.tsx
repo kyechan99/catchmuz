@@ -1,6 +1,6 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.scss';
+import './_grid.scss';
 
 import Index from './pages/Index';
 import Lobby from './pages/Lobby';
