@@ -16,3 +16,25 @@ export const InputNickname = ({ onChange } : InputProps) => {
         />
     )
 }
+
+type InputGroupProps = {
+    label: string
+    value: number
+    onChange: (s: number) => void
+}
+export const InputGroup = ({ label, value, onChange } : InputGroupProps) => {
+    return (
+        <div className="input-group">
+            <label className="input-label">{ label }</label>
+            <input
+                className="input-number" 
+                type="number"
+                value={value}
+                onChange={(e) => {
+                    onChange(Number(e.target.value));
+                }}
+            >
+            </input>
+        </div>
+    )
+}

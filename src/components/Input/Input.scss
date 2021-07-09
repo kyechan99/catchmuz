@@ -21,3 +21,38 @@
         color: rgba(255, 255, 255, 0.4);
     }
 }
+
+.input-group {
+    padding: 1rem;
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ffffff2b;
+    margin-bottom: 1rem;
+    width: 30rem;
+    .input-label {
+        font-size: 1.5rem;
+    }
+    .input-number {
+        // background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        color: $primary;
+        text-align: center;
+        
+        background: #703ee5;
+        width: 5rem;
+        color: white;
+        padding: .25rem;
+        border-radius: .5rem;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        &[type=number] {
+            -moz-appearance: textfield;
+        }
+    }
+}

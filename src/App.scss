@@ -1,10 +1,17 @@
 @import '/src/_variables.scss';
 
+body {
+  background-color: $bg-color;
+}
+
 .App {
   color: white;
   height: 100vh;
-  background-color: #1b1c20;
-  background: radial-gradient($week-bg-color, $bg-color);
+  overflow-y: auto;
+  // background: radial-gradient($week-bg-color, $bg-color);
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 h1 {
@@ -20,4 +27,8 @@ button, a, input {
 a {
   color: white;
   text-decoration: none;
+}
+
+*, ::after, ::before {
+	box-sizing: border-box;
 }

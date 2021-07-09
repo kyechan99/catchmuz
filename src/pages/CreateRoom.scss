@@ -1,0 +1,59 @@
+@import '/src/_variables.scss';
+
+.room-info {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.room-mode {
+    width: 45rem;
+    margin: 3rem auto;
+    .mode-menu {
+        margin-bottom: .5rem;
+        padding-bottom: .5rem;
+        border-bottom: 1px solid #FFFFFF2b;
+    }
+    .btn-mode {
+        margin-right: 1rem;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        background-color: transparent;
+        cursor: pointer;
+        &.un-selected {
+            opacity: .5;
+            transition: opacity ease .5s;
+            &:hover {
+                opacity: .7;
+            }
+        }
+    }
+    .fast-select-list {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+
+.tags-list {
+    margin: 0 auto;
+    display: flex;
+    width: 35rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.create-mng-list {
+    display: flex;
+    justify-content: center;
+    .btn {
+        display: flex;
+        align-items: center;
+    }
+    .create-svg {
+        margin-right: .5rem;
+    }
+}

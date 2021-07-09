@@ -22,7 +22,12 @@
   },
   "ts-node": {
     "compilerOptions": {
-      "module": "commonjs"
+      "module": "commonjs",
+      "baseUrl": ".",
+      "paths": {
+        "@src/*": ["src/*"],
+        "@components/*": ["src/components/*"],
+      }
     }
   },
   "include": [
