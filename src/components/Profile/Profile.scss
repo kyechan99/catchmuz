@@ -1,0 +1,21 @@
+@import '/src/variables.scss';
+
+.profile {
+    width: 8rem;
+    height: 8rem;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    img {
+        width: 8rem;
+        height: 8rem;
+    }
+    &.profile-sm {
+        width: 2rem;
+        height: 2rem;
+        display: inline-block;
+        img {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+}

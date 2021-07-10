@@ -1,5 +1,6 @@
 @import '/src/_variables.scss';
 
+
 .song-video {
     position: absolute;
     top: -1000px;
@@ -75,9 +76,68 @@
     }
 }
 
-.chat {
-    padding: 1rem;
-    height: calc(100vh - 4rem);
+.chat-box {
     border: 1px solid $spinner;
     border-radius: 1rem;
+    padding: 0px;
+    .chat-logs {
+        padding: 1rem 1rem 6rem 1rem;
+        height: calc(100vh - 4rem);
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+        &::-webkit-scrollbar {
+            width: 6px;
+            border-radius: 3px;
+            background: none;
+        }
+        &:-webkit-scrollbar-track {
+            background: none;
+        }
+        &::-webkit-scrollbar-thumb {
+            background: none;
+        }
+        &:hover {
+            &::-webkit-scrollbar-thumb {
+                background-color: $week-bg-color;
+            }
+        }
+    }
+    .chat-send {
+        position: absolute;
+        bottom: 0px;
+        height: 4rem;
+        margin: .5rem;
+        padding: .5rem;
+        width: calc(100% - 1rem);
+        // border: 1px solid $week-bg-color;
+        // background-color: $bg-color;
+        
+        background: rgba( 255, 255, 255, 0.25 );
+        box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+        backdrop-filter: blur( 4px );
+        -webkit-backdrop-filter: blur( 4px );
+        border: 1px solid rgba( 255, 255, 255, 0.18 );
+        border-radius: .5rem;
+
+        .chat-input {
+            color: white;
+            background-color: transparent;
+            border: none;
+            border-radius: .5rem;
+            height: 100%;
+            width: calc(100% - 3.5rem);
+            margin-right: .5rem;
+        }
+        .chat-submit {
+            border: none;
+            cursor: pointer;
+            height: 100%;
+            border-radius: .5rem;
+            width: 3rem;
+            color: white;
+            background-color: $point;
+        }
+    }
 }

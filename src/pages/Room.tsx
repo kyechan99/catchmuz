@@ -5,10 +5,15 @@ import { BeforeButton } from '../components/Button/Button';
 import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinner/Spinner';
 import { Tag } from '../components/Tag/Tag';
 
+import { Chat, MyChat } from '../components/Chat/Chat';
 
 const Room = () => {
     const [playedSong, setPlayedSong] = React.useState<number>(1);
-    const [time, setTime] = React.useState<number>(30);
+    const [time, setTime] = React.useState<number>(3);
+
+    const [msg, setMsg] = React.useState<string>('');
+    
+    const bottomRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         const countdown = setInterval(() => {
@@ -20,7 +25,19 @@ const Room = () => {
           }
         }, 1000);
         return () => clearInterval(countdown);
-      }, [time]);
+    }, [time]);
+
+    function sendChat() {
+        if (msg === '') {
+            return;
+        }
+        setMsg('');
+        if (bottomRef.current) {
+            bottomRef.current.scrollIntoView({ behavior: "smooth" });
+            console.log(bottomRef.current);
+            bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
+        }
+    }
 
     return (
         <div className="container-fluid">
@@ -67,8 +84,33 @@ const Room = () => {
                     </div>
 
                 </div>
-                <div className="col-md-4 chat">
-                    xvc 
+                <div className="col-md-4 chat-box">
+                    <div className="chat-logs" ref={bottomRef}>
+                        <Chat author={'닉네임'} profileNum={3}>시간을 달려서</Chat>
+                        <Chat isPrimary={true} author={'우정잉'} profileNum={5}>광장동에서</Chat>
+                        <Chat author={'궁시렁궁시렁'} profileNum={6}>아 이거 진짜 모르겠는데 ㅋㅋㅋ 아시는분?</Chat>
+                        <MyChat isPrimary={true}>와 이걸 모른다고??</MyChat>
+                        <Chat author={'닉네임'} profileNum={3}>시간을 달려서</Chat>
+                        <Chat author={'궁시렁궁시렁'} profileNum={6}>아 이거 진짜 모르겠는데 ㅋㅋㅋ 아시는분?</Chat>
+                        <Chat author={'닉네임'} profileNum={3}>시간을 달려서</Chat>
+                        <Chat author={'우정잉'} profileNum={5}>광장동에서</Chat>
+                        <Chat author={'궁시렁궁시렁'} profileNum={6}>아 이거 진짜 모르겠는데 ㅋㅋㅋ 아시는분?</Chat>
+                    </div>
+                    <div className="chat-send">
+                        <input 
+                            className="chat-input"
+                            type="text"
+                            value={msg}
+                            onChange={ (e) => {
+                                setMsg(e.target.value);
+                            }}
+                            onKeyPress={ (e) => {
+                                if (e.key === 'Enter') sendChat();
+                            }}
+                        >
+                        </input>
+                        <button className="chat-submit" onClick={sendChat}>전송</button>
+                    </div>
                 </div>
             </div>
         </div>
