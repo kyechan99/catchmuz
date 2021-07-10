@@ -1,0 +1,83 @@
+@import '/src/_variables.scss';
+
+.song-video {
+    position: absolute;
+    top: -1000px;
+}
+
+.main {
+    padding-left: 0px;
+
+    .remaining-songs {
+        margin: 0px;
+        font-size: 1.5rem;
+        color: $spinner;
+        position: absolute;
+        right: 1rem;
+        top: 0px;
+        cursor: default;
+    }
+
+    .answer-group {
+        position: relative;
+        left: 50%;
+        top: 15%;
+        transform: translate(-50%, -15%);
+        text-align: center;
+        cursor: default;
+        .answer-member {
+            margin: 0px;
+        }
+        .answer-song {
+            margin: 0px;
+            color: $point;
+        }
+    }
+
+    .spinner-parent {
+        position: relative;
+        left: 50%;
+        top: 40%;
+        transform: translate(-50%, -40%);
+        display: flex;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        .play-icon {
+            width: 140px;
+            height: 140px;
+            path {
+                fill: $spinner;
+            }
+        }
+        .timer {
+            margin: 0px;
+            position: absolute;
+            font-size: 1.25rem;
+            top: calc(50% + 3rem);
+            cursor: default;
+        }
+    }
+
+    .song-info {
+        position: relative;
+        left: 50%;
+        top: 52%;
+        transform: translate(-50%, -52%);
+        .song-tags {
+            width: 30rem;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+}
+
+.chat {
+    padding: 1rem;
+    height: calc(100vh - 4rem);
+    border: 1px solid $spinner;
+    border-radius: 1rem;
+}

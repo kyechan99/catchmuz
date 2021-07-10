@@ -1,15 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Room.scss';
+import './RoomMenu.scss';
 
-type RoomProps = {
+type RoomMenuProps = {
     to: string
     children: string
     curMem: number
     maxMem: number
 }
 
-export const Room = ({ to, children, curMem, maxMem } : RoomProps) => {
+export const RoomMenu = ({ to, children, curMem, maxMem } : RoomMenuProps) => {
     return (
         <Link
             to={ to }

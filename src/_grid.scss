@@ -18,14 +18,16 @@ $column-padding: 1rem;
 @mixin container-box {
 	width: 100%;
 	// position: relative;
+    padding-top: 2rem;
 	padding-left: $container-padding;
 	padding-right: $container-padding;
 }
 .container-fluid {
 	@include container-box;
+    width: calc(100% - 32px);
+    margin: 0 auto;
 }
 .container, .container-xl, .container-lg, .container-md, .container-sm {
-    padding-top: 2rem;
 	margin-left: auto;
 	margin-right: auto;
 	@include container-box;

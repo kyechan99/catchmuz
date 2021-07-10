@@ -65,13 +65,13 @@ export const BeforeButton = () => {
     )
 }
 
-type TagProps = {
+type TagButtonProps = {
     children? : React.ReactNode,
     clicked? : () => void,
     isSelected : boolean
 }
 
-export const TagButton = ({ children, clicked, isSelected } : TagProps) => {
+export const TagButton = ({ children, clicked, isSelected } : TagButtonProps) => {
     return (
         <Button
             className={"btn-tag " + (isSelected && "tag-selected")}

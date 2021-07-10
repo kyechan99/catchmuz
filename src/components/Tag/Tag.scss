@@ -1,0 +1,20 @@
+@import '/src/variables.scss';
+
+.tag {
+    cursor: default;
+    color: white;
+    margin: .5rem;
+    padding: .5rem 1rem;
+    font-size: 1rem;
+    display: inline;
+    text-align: center;
+    border: none;
+    border-radius: .25rem;
+    background-color: $un-selected-color;
+    &.tag-primary {
+        background-color: $primary;
+    }
+    &.tag-point {
+        background-color: $point;
+    }
+}

@@ -1,0 +1,48 @@
+@import '/src/variables.scss';
+
+.spinner {
+    position: absolute;
+    border: 6px solid transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    border-bottom-color: $spinner;
+    &.spinner-sm {
+        width: 8rem;
+        height: 8rem;
+        animation: rotation 1.5s linear infinite;
+        border-top-color: $spinner;
+    }
+    &.spinner-md {
+        width: 12rem;
+        height: 12rem;
+        border-width: 8px;
+        border-left-color: $spinner;
+        animation: rotation 3s linear infinite;
+    }
+    &.spinner-lg {
+        width: 16rem;
+        height: 16rem;
+        border-width: 10px;
+        border-right-color: $spinner;
+        border-left-color: $spinner;
+        animation: rotation 6.5s linear infinite;
+    }
+    &.spinner-xl {
+        width: 20em;
+        height: 20rem;
+        border-width: 12px;
+        border-right-color: $spinner;
+        border-left-color: $spinner;
+        animation: rotation 10s linear infinite;
+    }
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 
