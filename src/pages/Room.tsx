@@ -7,13 +7,24 @@ import { Tag } from '../components/Tag/Tag';
 
 import { Chat, MyChat } from '../components/Chat/Chat';
 
+type ChatType = {
+    msg: string
+    author: string
+    profileNum: number
+}
+
 const Room = () => {
+    // 현재까지 진행한 노래 수
     const [playedSong, setPlayedSong] = React.useState<number>(1);
+    // 타이머
     const [time, setTime] = React.useState<number>(3);
 
+    // 채팅 내역
+    const [chatLogs, setChatLogs] = React.useState<ChatType[]>([]);
+    // 채팅 로그 Ref
+    const chatLogsRef = React.useRef<HTMLDivElement>(null);
+    // 메세지 입력
     const [msg, setMsg] = React.useState<string>('');
-    
-    const bottomRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
         const countdown = setInterval(() => {
@@ -27,16 +38,30 @@ const Room = () => {
         return () => clearInterval(countdown);
     }, [time]);
 
+    React.useEffect(() => {
+        if (chatLogsRef.current) {
+            chatLogsRef.current.addEventListener('DOMNodeInserted', e => {
+                chatLogsRef.current?.scroll({
+                    top: chatLogsRef.current.scrollHeight,
+                    behavior: 'smooth'
+                });
+            });
+        }
+    }, [])
+
     function sendChat() {
-        if (msg === '') {
+        if (msg.replace(/\s/g, '') === '') {
+            setMsg('');
             return;
         }
+
+        setChatLogs(beforeChatLogs => [...beforeChatLogs, {
+            msg: msg,
+            author: 'ME2',
+            profileNum: 3
+        }]);
+
         setMsg('');
-        if (bottomRef.current) {
-            bottomRef.current.scrollIntoView({ behavior: "smooth" });
-            console.log(bottomRef.current);
-            bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
-        }
     }
 
     return (
@@ -85,16 +110,22 @@ const Room = () => {
 
                 </div>
                 <div className="col-md-4 chat-box">
-                    <div className="chat-logs" ref={bottomRef}>
-                        <Chat author={'닉네임'} profileNum={3}>시간을 달려서</Chat>
-                        <Chat isPrimary={true} author={'우정잉'} profileNum={5}>광장동에서</Chat>
-                        <Chat author={'궁시렁궁시렁'} profileNum={6}>아 이거 진짜 모르겠는데 ㅋㅋㅋ 아시는분?</Chat>
-                        <MyChat isPrimary={true}>와 이걸 모른다고??</MyChat>
-                        <Chat author={'닉네임'} profileNum={3}>시간을 달려서</Chat>
-                        <Chat author={'궁시렁궁시렁'} profileNum={6}>아 이거 진짜 모르겠는데 ㅋㅋㅋ 아시는분?</Chat>
-                        <Chat author={'닉네임'} profileNum={3}>시간을 달려서</Chat>
-                        <Chat author={'우정잉'} profileNum={5}>광장동에서</Chat>
-                        <Chat author={'궁시렁궁시렁'} profileNum={6}>아 이거 진짜 모르겠는데 ㅋㅋㅋ 아시는분?</Chat>
+                    <div className="chat-logs" ref={chatLogsRef}>
+                        {
+                            chatLogs.map((chat, idx) => {
+                                if (chat.author === 'ME')
+                                    return <MyChat key={ idx }>{ chat.msg }</MyChat>
+                                
+                                return <Chat
+                                            profileNum={ chat.profileNum }
+                                            author={ chat.author }
+                                            key={ idx }
+                                        >
+                                            { chat.msg }
+                                        </Chat>
+                            })
+                        }
+
                     </div>
                     <div className="chat-send">
                         <input 

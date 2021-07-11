@@ -18,10 +18,9 @@ const Index = () => {
 
     function goToLobby() {
         console.log(nickname);
-        if (nickname == '')
+        if (nickname.replace(/\s/g, '') === '')
             return;
         dispatch({type : 'user/NICKNAME', payload: nickname});
-        // dispatch(setNickname(nickname));
         history.push('/lobby');    
     }
 

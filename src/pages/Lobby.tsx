@@ -11,10 +11,11 @@ import { RoomMenu } from '../components/Room/RoomMenu'
 
 const Lobby = () => {
     const user = useSelector((state: RootState) => state.user);
-
+    console.log(user);
     return (
         <div className="container">
-            <h1>Lobby</h1>
+            
+            <h1>Lobby{ user.nickname } </h1>
             <div className="room-list">
                 <RoomMenu to="/dd" curMem={3} maxMem={4}>#랩 #2020</RoomMenu>
                 <RoomMenu to="/dd" curMem={3} maxMem={4}>#K-POP #아이돌 #최신</RoomMenu>

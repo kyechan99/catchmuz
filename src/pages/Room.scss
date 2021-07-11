@@ -80,23 +80,25 @@
     border: 1px solid $spinner;
     border-radius: 1rem;
     padding: 0px;
+    overflow: hidden;
     .chat-logs {
         padding: 1rem 1rem 6rem 1rem;
         height: calc(100vh - 4rem);
         -ms-overflow-style: none;
         scrollbar-width: none;
-        overflow-y: auto;
+        overflow-y: scroll;
         overflow-x: hidden;
         &::-webkit-scrollbar {
             width: 6px;
-            border-radius: 3px;
             background: none;
         }
         &:-webkit-scrollbar-track {
             background: none;
         }
         &::-webkit-scrollbar-thumb {
-            background: none;
+            border-radius: 3px;
+            background-color: none;
+            transition: background-color ease 1s;
         }
         &:hover {
             &::-webkit-scrollbar-thumb {
