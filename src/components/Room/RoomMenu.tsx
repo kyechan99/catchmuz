@@ -4,7 +4,7 @@ import './RoomMenu.scss';
 
 type RoomMenuProps = {
     to: string
-    children: string
+    children?: React.ReactNode
     curMem: number
     maxMem: number
 }

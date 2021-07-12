@@ -16,17 +16,34 @@ const App = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    socket.on('my socket id', (msg) => {
-      console.log('my socket id', msg);
+    socket.on('my socket id', (data) => {
+      console.log('my socket id', data);
 
-      dispatch({type : 'user/SOCKET_ID', payload: msg.socketId});
+      dispatch({type : 'user/SOCKET_ID', payload: data.socketId});
     });
+
+    // socket.on('get room list', (data) => {
+    //   console.log('grl', data);
+    //   // TODO : 
+
+    // });
+
+    return () => {
+      socket.close();
+    };
+
   }, []);
+
+
 
   return (
     <div className="App">
       <Route path="/" component={Index} exact/>
-      <Route path="/lobby" component={Lobby}/>
+      <Route path="/lobby" component={() =>
+        <Lobby
+          socket={ socket }
+        />
+      }/>
       <Route path="/create" component={CreateRoom}/>
       <Route path="/room/:id" component={Room}/>
     </div>
