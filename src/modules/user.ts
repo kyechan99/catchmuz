@@ -31,7 +31,7 @@ type UserState = {
 
 const initialState: UserState = {
     nickname: '',
-    profile: 0,
+    profile: 1,
     socketId: ''
 };
 

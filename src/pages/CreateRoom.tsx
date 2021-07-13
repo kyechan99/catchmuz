@@ -1,11 +1,22 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
 import './CreateRoom.scss';
+
+import { useSelector } from 'react-redux';
+import { RootState } from '../modules';
 
 import { BeforeButton, PointButton, TagButton, ImgButton } from '../components/Button/Button';
 import { InputGroup } from '../components/Input/Input';
 
-const CreateRoom = () => {
+type CreateRoomProps = {
+    socket: Socket
+}
+
+const CreateRoom = ({ socket } : CreateRoomProps) => {
+    const user = useSelector((state: RootState) => state.user);
+    const history = useHistory();
+
     type TagsType = {
         [type: string]: string[]
     }
@@ -55,8 +66,19 @@ const CreateRoom = () => {
     // 최대 노래 개수
     const [maxSongNum,  setMaxSongNum] = React.useState<number>(30);
     // 최대 인원 수
-    const [maxMemNum,  setMemNum] = React.useState<number>(10);
+    const [maxUserNum,  setMaxUserNum] = React.useState<number>(10);
 
+    React.useEffect(() => {
+        socket.on('get room code', getRoomCode);
+
+        return () => {
+            socket.off('get room code', getRoomCode);
+        }
+    }, []);
+
+    // <방 커스텀 할때 태그 선택시 호출>
+    //- tag - 선택한 태그 명
+    //- 만약 선택한 태그라면 선택해제 | 미선택 태그라면 선택
     function selectTag(tag: string) {
         if (!selectTags.includes(tag)) {
             setSelectTags([...selectTags, tag]);
@@ -66,10 +88,27 @@ const CreateRoom = () => {
         setSelectTags(selectTags.filter(item => item !== tag));
     }
 
+    // <태그 데이터들을 모두 묶어서 불러올때 사용>
+    //- 차후 태그들을 종류별로 나누어서 사용할 수도 있어 분리해 둠
     function getTags(type: string = 'all') {
         if (type === 'all')
             return tags.singer.concat(tags.genre).concat(tags.language).concat(tags.year);
         return tags[type];
+    }
+
+    // <방 생성. 입력한 데이터들을 서버로 전송>
+    function createRoom() {
+        socket.emit('create room', {
+            tags: selectTags,
+            maxSongNum: maxSongNum,
+            maxUserNum: maxUserNum,
+            user: user
+        });
+    }
+
+    // <서버로 부터 방 코드 받아옴. 이후 생성된 방으로 이동>
+    function getRoomCode(data: any) {
+        history.push(`/room/${data.roomCode}`);
     }
 
     return (
@@ -79,7 +118,7 @@ const CreateRoom = () => {
             <div className="room-info">
                 <InputGroup label="최대 노래 수" value={maxSongNum} onChange={setMaxSongNum}></InputGroup>
                 
-                <InputGroup label="최대 인원 수" value={maxMemNum} onChange={setMemNum}></InputGroup>
+                <InputGroup label="최대 인원 수" value={maxUserNum} onChange={setMaxUserNum}></InputGroup>
             </div>
 
             <div className="room-mode">
@@ -103,6 +142,7 @@ const CreateRoom = () => {
                         커스텀 모드
                     </button>
                 </div>
+
                 {
                     !isCustomMode &&
                     <div className="fast-select-list">
@@ -133,6 +173,7 @@ const CreateRoom = () => {
                         </ImgButton>
                     </div>
                 }
+                
                 {
                     isCustomMode && 
                     <div className="tags-list">
@@ -162,15 +203,13 @@ const CreateRoom = () => {
             }
             
             <div className="create-mng-list">
-                <Link to="/room/10" className="create">
-                    <PointButton className={ (selectTags.length === 0) ? "disabled" : "" }>
-                        <svg className="create-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="#FFFFFF">
-                            <path fillRule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM0 8a8 8 0 1116 0A8 8 0 010 8zm11.78-1.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z">
-                            </path>
-                        </svg>
-                        방 생성
-                    </PointButton>
-                </Link>
+                <PointButton className={ (selectTags.length === 0) ? "disabled" : "" } clicked={createRoom}>
+                    <svg className="create-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="#FFFFFF">
+                        <path fillRule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM0 8a8 8 0 1116 0A8 8 0 010 8zm11.78-1.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z">
+                        </path>
+                    </svg>
+                    방 생성
+                </PointButton>
             </div>
         </div>
     )

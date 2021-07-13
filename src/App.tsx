@@ -44,8 +44,16 @@ const App = () => {
           socket={ socket }
         />
       }/>
-      <Route path="/create" component={CreateRoom}/>
-      <Route path="/room/:id" component={Room}/>
+      <Route path="/create" component={() => 
+        <CreateRoom
+          socket={ socket }
+        />
+      }/>
+      <Route path="/room/:roomCode" component={() => 
+        <Room
+          socket={ socket }
+        />
+      }/>
     </div>
   );
 }

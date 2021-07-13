@@ -1,19 +1,42 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
 import './Room.scss';
+
+import { useSelector } from 'react-redux';
+import { RootState } from '../modules';
 
 import { BeforeButton } from '../components/Button/Button';
 import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinner/Spinner';
+import { Chat, MyChat } from '../components/Chat/Chat';
 import { Tag } from '../components/Tag/Tag';
 
-import { Chat, MyChat } from '../components/Chat/Chat';
+
+type RoomProps = {
+    socket: Socket
+}
+
+type UserType = {
+    nickname: string
+    profile: number
+    socketId: string
+};
+
 
 type ChatType = {
     msg: string
+    socketId: string
     author: string
     profileNum: number
 }
 
-const Room = () => {
+const Room = ({ socket } : RoomProps) => {
+    const user = useSelector((state: RootState) => state.user);
+
+    // TODO : 비정상적 루트로 방으로 들어왔을때 강퇴 (웹 지원하게 될시 필요함. 현재 electron 빌드에선 불필요)
+    // 방 고유 번호
+    const { roomCode } = useParams<{ roomCode: string }>();
+
     // 현재까지 진행한 노래 수
     const [playedSong, setPlayedSong] = React.useState<number>(1);
     // 타이머
@@ -25,6 +48,8 @@ const Room = () => {
     const chatLogsRef = React.useRef<HTMLDivElement>(null);
     // 메세지 입력
     const [msg, setMsg] = React.useState<string>('');
+
+    const [userList, setUserList] = React.useState<UserType[]>([]);
 
     React.useEffect(() => {
         const countdown = setInterval(() => {
@@ -47,7 +72,63 @@ const Room = () => {
                 });
             });
         }
-    }, [])
+
+        socket.on('receive chat', receiveChat);
+        socket.on('someone join', someoneJoin);
+        socket.on('someone exit', someoneExit);
+        
+        // 방 입장 확인 | 방장일 경우 반환 되지 않음
+        socket.on('join room', joinRoom);
+
+        // 서버에게 방 입장했다고 알림
+        socket.emit('join room', {
+            roomCode: roomCode,
+            user: user
+        })
+
+        return () => {
+            socket.emit('exit room', { 
+                roomCode : roomCode,
+                socketId: user.socketId
+            });
+            socket.off('receive chat', receiveChat);
+            socket.off('someone join', someoneJoin);
+            socket.off('someone exit', someoneExit);
+            socket.off('join room', receiveChat);
+        }
+    }, []);
+
+    function joinRoom(data: any) {
+        console.log('someone join ', data);
+    }
+
+    function someoneJoin(data: UserType) {
+        console.log('someone join', data);
+        setUserList(beforeList => [...beforeList, {
+            nickname: data.nickname,
+            profile: data.profile,
+            socketId: data.socketId
+        }]);
+    }
+
+    function someoneExit(data: any) {
+        console.log('someone exit', data);
+
+        setUserList(userList.filter((e) => {
+            if (e.socketId !== data.socketId)
+                return e;
+        }));
+    }
+
+    function receiveChat(data: any) {
+        console.log(data);
+        setChatLogs(beforeChatLogs => [...beforeChatLogs, {
+            msg: data.msg,
+            socketId: data.socketId,
+            author: data.author,
+            profileNum: data.profileNum
+        }]);
+    }
 
     function sendChat() {
         if (msg.replace(/\s/g, '') === '') {
@@ -55,11 +136,13 @@ const Room = () => {
             return;
         }
 
-        setChatLogs(beforeChatLogs => [...beforeChatLogs, {
+        socket.emit('send chat', {
+            roomCode: roomCode,
             msg: msg,
-            author: 'ME2',
-            profileNum: 3
-        }]);
+            socketId: user.socketId,
+            author: user.nickname,
+            profileNum: user.profile
+        });
 
         setMsg('');
     }
@@ -76,6 +159,12 @@ const Room = () => {
                     title="YouTube video player" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
+            }
+
+            {
+                userList.map((e) => {
+                    return <p>{e.nickname}</p>
+                })
             }
 
             <div className="row">
@@ -113,7 +202,7 @@ const Room = () => {
                     <div className="chat-logs" ref={chatLogsRef}>
                         {
                             chatLogs.map((chat, idx) => {
-                                if (chat.author === 'ME')
+                                if (chat.socketId === user.socketId)
                                     return <MyChat key={ idx }>{ chat.msg }</MyChat>
                                 
                                 return <Chat
