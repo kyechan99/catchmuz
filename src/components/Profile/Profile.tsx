@@ -14,7 +14,7 @@ export const Profile = ({ profileNum, children, className } : ProfileProps) => {
         >
             <img 
                 className="profile-img"
-                src={`profile/profile_${profileNum}.png`}
+                src={`/profile/profile_${profileNum}.png`}
                 alt="profile"
             />
         </div>

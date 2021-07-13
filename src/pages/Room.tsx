@@ -20,6 +20,7 @@ type UserType = {
     nickname: string
     profile: number
     socketId: string
+    answer: number 
 };
 
 
@@ -49,7 +50,10 @@ const Room = ({ socket } : RoomProps) => {
     // 메세지 입력
     const [msg, setMsg] = React.useState<string>('');
 
+    // 유저 목록
     const [userList, setUserList] = React.useState<UserType[]>([]);
+    // 방장인지
+    const [isManager, setManager] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         const countdown = setInterval(() => {
@@ -73,13 +77,22 @@ const Room = ({ socket } : RoomProps) => {
             });
         }
 
+        // Input My Data
+        someoneJoin({
+            nickname: user.nickname,
+            profile: user.profile,
+            socketId: user.socketId,
+            answer: 0
+        });
+
         socket.on('receive chat', receiveChat);
         socket.on('someone join', someoneJoin);
         socket.on('someone exit', someoneExit);
         
         // 방 입장 확인 | 방장일 경우 반환 되지 않음
         socket.on('join room', joinRoom);
-
+        socket.on('your manager', manager);
+        
         // 서버에게 방 입장했다고 알림
         socket.emit('join room', {
             roomCode: roomCode,
@@ -95,19 +108,27 @@ const Room = ({ socket } : RoomProps) => {
             socket.off('someone join', someoneJoin);
             socket.off('someone exit', someoneExit);
             socket.off('join room', receiveChat);
+            socket.off('your manager', manager);
         }
     }, []);
 
-    function joinRoom(data: any) {
-        console.log('someone join ', data);
+    function manager() {
+        setManager(true);
+    }
+
+    function joinRoom(data: UserType[]) {
+        setUserList(beforeUserList => [...beforeUserList, ...data.map(e => {
+            e.answer = 0;
+            return e;
+        })]);
     }
 
     function someoneJoin(data: UserType) {
-        console.log('someone join', data);
         setUserList(beforeList => [...beforeList, {
             nickname: data.nickname,
             profile: data.profile,
-            socketId: data.socketId
+            socketId: data.socketId,
+            answer: 0
         }]);
     }
 
@@ -163,8 +184,12 @@ const Room = ({ socket } : RoomProps) => {
 
             {
                 userList.map((e) => {
-                    return <p>{e.nickname}</p>
+                    return <p key={e.socketId}>{e.nickname} - {e.answer}</p>
                 })
+            }
+
+            {
+                isManager && <p>방장입니다.</p>
             }
 
             <div className="row">
