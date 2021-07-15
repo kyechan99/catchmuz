@@ -182,19 +182,25 @@ const Room = ({ socket } : RoomProps) => {
                 ></iframe>
             }
 
-            {
-                userList.map((e) => {
-                    return <p key={e.socketId}>{e.nickname} - {e.answer}</p>
-                })
-            }
-
-            {
-                isManager && <p>방장입니다.</p>
-            }
-
             <div className="row">
                 <div className="col-md-8 main">
                     <BeforeButton></BeforeButton>
+
+                    <div className="player-list">
+                        {
+                            userList.map((e) => {
+                                return  <div className="player-info" key={e.socketId}>
+                                            <div className="player-color"></div>
+                                            <p className="player-name">
+                                                {e.nickname}<span className="player-score"> {e.answer} </span>
+                                            </p>
+                                        </div>
+                            })
+                        }
+                        {
+                            isManager && <p>방장입니다.</p>
+                        }
+                    </div>
                     
                     <p className="remaining-songs">{playedSong} / 10</p>
 
