@@ -107,7 +107,7 @@ const Room = ({ socket } : RoomProps) => {
             socket.off('receive chat', receiveChat);
             socket.off('someone join', someoneJoin);
             socket.off('someone exit', someoneExit);
-            socket.off('join room', receiveChat);
+            socket.off('join room', joinRoom);
             socket.off('your manager', manager);
         }
     }, []);
@@ -124,6 +124,7 @@ const Room = ({ socket } : RoomProps) => {
     }
 
     function someoneJoin(data: UserType) {
+        console.log('someone join ', userList, data);
         setUserList(beforeList => [...beforeList, {
             nickname: data.nickname,
             profile: data.profile,
@@ -133,12 +134,11 @@ const Room = ({ socket } : RoomProps) => {
     }
 
     function someoneExit(data: any) {
-        console.log('someone exit', data);
+        console.log('someone exit', userList, data);
 
-        setUserList(userList.filter((e) => {
-            if (e.socketId !== data.socketId)
-                return e;
-        }));
+        setUserList(beforeUserList => [...beforeUserList.filter(e => {
+            return (e.socketId !== data.socketId);
+        })]);
     }
 
     function receiveChat(data: any) {
