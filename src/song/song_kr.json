@@ -1,0 +1,38 @@
+[
+    {
+        "code": "VHyZ6bXTYfI",
+        "start": 0,
+        "tags": ["힙합", "재하(JAEHA)", "2020", "싱잉랩"],
+        "answer": ["안았어야해", "save"]
+    },
+    {
+        "code": "NB8LX6A5BBM",
+        "start": 0,
+        "tags": ["힙합", "ASH ISLAND", "2021", "트렌드"],
+        "answer": ["멜로디", "melody"]
+    },
+    {
+        "code": "SVCnivlXrhg",
+        "start": 0,
+        "tags": ["힙합", "지코", "페노메코", "2021"],
+        "answer": ["걘아니야", "actually", "걘아니야pt2", "걘아니야part2"]
+    },
+    {
+        "code": "8GPAW4dMxsY",
+        "start": 0,
+        "tags": ["알앤비", "헤이즈", "2021", "트렌드", "최신곡", "TOP100"],
+        "answer": ["헤픈우연"]
+    },
+    {
+        "code": "4TWR90KJl84",
+        "start": 8,
+        "tags": ["여자아이돌", "에스파", "2021", "트렌드", "최신곡", "TOP100"],
+        "answer": ["넥스트레벨", "nextlevel"]
+    },
+    {
+        "code": "HzOjwL7IP_o",
+        "start": 55,
+        "tags": ["여자아이돌", "오마이걸", "2021", "트렌드", "최신곡", "TOP100"],
+        "answer": ["던던댄스", "dundundance"]
+    }
+]

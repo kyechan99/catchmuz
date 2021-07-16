@@ -23,12 +23,20 @@ type UserType = {
     answer: number 
 };
 
-
 type ChatType = {
     msg: string
     socketId: string
     author: string
     profileNum: number
+    isAnswer: boolean
+}
+
+type SongType = {
+    name: string
+    code: string
+    start: number
+    tags: string[]
+    answer: string[]
 }
 
 const Room = ({ socket } : RoomProps) => {
@@ -41,7 +49,7 @@ const Room = ({ socket } : RoomProps) => {
     // 현재까지 진행한 노래 수
     const [playedSong, setPlayedSong] = React.useState<number>(1);
     // 타이머
-    const [time, setTime] = React.useState<number>(3);
+    const [time, setTime] = React.useState<number>(100);
 
     // 채팅 내역
     const [chatLogs, setChatLogs] = React.useState<ChatType[]>([]);
@@ -55,19 +63,25 @@ const Room = ({ socket } : RoomProps) => {
     // 방장인지
     const [isManager, setManager] = React.useState<boolean>(false);
 
-    React.useEffect(() => {
-        const countdown = setInterval(() => {
-          if (time > 0) {
-            setTime(time - 1);
-          }
-          if (time === 0) {
-            clearInterval(countdown);
-          }
-        }, 1000);
-        return () => clearInterval(countdown);
-    }, [time]);
+    const [songData, setSongData] = React.useState<SongType | null>(null);
+    const [answerUser, setAnswerUser] = React.useState<string>('');
+    // const [songNum, setSongNum] = React.useState<number>({});
+
+    // React.useEffect(() => {
+    //     const countdown = setInterval(() => {
+    //       if (time > 0) {
+    //         setTime(time - 1);
+    //       }
+    //       if (time === 0) {
+    //         clearInterval(countdown);
+    //       }
+    //     }, 1000);
+    //     return () => clearInterval(countdown);
+    // }, [time]);
 
     React.useEffect(() => {
+        console.log('IIIIIIIINNNNNNNIIIIIIIITTTTTTTT');
+
         if (chatLogsRef.current) {
             chatLogsRef.current.addEventListener('DOMNodeInserted', e => {
                 chatLogsRef.current?.scroll({
@@ -88,6 +102,10 @@ const Room = ({ socket } : RoomProps) => {
         socket.on('receive chat', receiveChat);
         socket.on('someone join', someoneJoin);
         socket.on('someone exit', someoneExit);
+
+        socket.on('game start', gameStart);
+        socket.on('next song', nextSong);
+        socket.on('game end', gameEnd);
         
         // 방 입장 확인 | 방장일 경우 반환 되지 않음
         socket.on('join room', joinRoom);
@@ -107,22 +125,52 @@ const Room = ({ socket } : RoomProps) => {
             socket.off('receive chat', receiveChat);
             socket.off('someone join', someoneJoin);
             socket.off('someone exit', someoneExit);
+
+            socket.off('game start', gameStart);
+            socket.off('next song', nextSong);
+            socket.off('game end', gameEnd);
+
             socket.off('join room', joinRoom);
             socket.off('your manager', manager);
         }
     }, []);
 
-    function manager() {
-        setManager(true);
+
+    //==== Game Manager ===================================================================
+    let timeMng: NodeJS.Timer;
+    function gameStart(data: any) {
+
+    }
+    function nextSong(data: SongType) {
+        console.log('NEXT SONG', data);
+        setTime(  15  );
+        setSongData(data);
+        setAnswerUser('');
+        clearInterval(timeMng);
+        timeMng = setInterval(timeCounting, 1000);
+    }
+    function gameEnd() {
+        setSongData(null);
+    }
+    function timeCounting() {
+        let nowTime = 10000;
+
+        setTime(dT => {
+            nowTime = --dT;
+            return dT;
+        })
+
+        if (nowTime === 0) {
+            console.log('TIME 0000000000000');
+            socket.emit('request next', { roomCode: roomCode });
+            clearInterval(timeMng);
+        }
+
+        console.log(nowTime);
     }
 
-    function joinRoom(data: UserType[]) {
-        setUserList(beforeUserList => [...beforeUserList, ...data.map(e => {
-            e.answer = 0;
-            return e;
-        })]);
-    }
 
+    //==== User Manager ===================================================================
     function someoneJoin(data: UserType) {
         console.log('someone join ', userList, data);
         setUserList(beforeList => [...beforeList, {
@@ -132,7 +180,6 @@ const Room = ({ socket } : RoomProps) => {
             answer: 0
         }]);
     }
-
     function someoneExit(data: any) {
         console.log('someone exit', userList, data);
 
@@ -140,19 +187,50 @@ const Room = ({ socket } : RoomProps) => {
             return (e.socketId !== data.socketId);
         })]);
     }
+    function joinRoom(data: UserType[]) {
+        setUserList(beforeUserList => [...beforeUserList, ...data.map(e => {
+            e.answer = 0;
+            return e;
+        })]);
+    }
+    function manager() {
+        setManager(true);
+    }
 
-    function receiveChat(data: any) {
-        console.log(data);
+
+    //==== Chat Manager ===================================================================
+    function removeSpaceString(data: string) : string {
+        return data.replace(/\s/g, '');
+    }
+    function receiveChat(data: ChatType) {
+        if (data.isAnswer) {
+            console.log('receiveChat - correct !!!!!!!!!');
+            setUserList((beforeUserList) => {
+                return [...beforeUserList.map(e => {
+                    return {
+                        ...e,
+                        answer: (e.socketId === data.socketId) ? e.answer + 1 : e.answer
+                    }
+                    // if (e.socketId === data.socketId) {
+                    //     console.log('SET USER LIST !!!!!!!!!');
+                    //     e.answer++;
+                    // }
+                    // return e;
+                })]
+            });
+            setAnswerUser(data.author);
+        }
+
         setChatLogs(beforeChatLogs => [...beforeChatLogs, {
             msg: data.msg,
             socketId: data.socketId,
             author: data.author,
-            profileNum: data.profileNum
+            profileNum: data.profileNum,
+            isAnswer: data.isAnswer
         }]);
     }
-
     function sendChat() {
-        if (msg.replace(/\s/g, '') === '') {
+        if (removeSpaceString(msg) === '') {
             setMsg('');
             return;
         }
@@ -171,12 +249,12 @@ const Room = ({ socket } : RoomProps) => {
     return (
         <div className="container-fluid">
             {
-                time > 0 &&
+                (time > 0 && songData !== null) &&
                 <iframe 
                     className="song-video"
                     id="player" 
                     width="560" height="315"
-                    src="https://www.youtube.com/embed/QnjslF3V44A?autoplay=1" 
+                    src={`https://www.youtube.com/embed/${songData?.code}?autoplay=1`}
                     title="YouTube video player" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
@@ -197,17 +275,17 @@ const Room = ({ socket } : RoomProps) => {
                                         </div>
                             })
                         }
-                        {
-                            isManager && <p>방장입니다.</p>
-                        }
                     </div>
                     
                     <p className="remaining-songs">{playedSong} / 10</p>
 
-                    <div className="answer-group">
-                        <h3 className="answer-member">정답자 : AABB</h3>
-                        <h2 className="answer-song">광장동에서 - 창모</h2>
-                    </div>
+                    {
+                        (songData != null && answerUser !== '') &&
+                        <div className="answer-group">
+                            <h3 className="answer-member">정답자 : {answerUser}</h3>
+                            <h2 className="answer-song">{ songData.name }</h2>
+                        </div>
+                    }
 
                     <div className="spinner-parent">
                         <SpinnerSM></SpinnerSM>
@@ -220,25 +298,40 @@ const Room = ({ socket } : RoomProps) => {
                         <p className="timer">{time} 초</p>
                     </div>
 
-                    <div className="song-info">
-                        <div className="song-tags">
-                            <Tag className={'tag-primary'}>힙합</Tag>
-                            <Tag className={'tag-primary'}>2020</Tag>
-                            <Tag>트렌드</Tag>
+                    {
+                        (songData != null && answerUser !== '') &&
+                        <div className="song-info">
+                            <div className="song-tags">
+                                {
+                                    songData.tags.map((tag) => {
+                                        return <Tag key={tag}>{tag}</Tag>
+                                    })
+                                }
+                                {/* <Tag className={'tag-primary'}>힙합</Tag>
+                                <Tag className={'tag-primary'}>2020</Tag>
+                                <Tag>트렌드</Tag> */}
+                            </div>
                         </div>
-                    </div>
+                    }
 
                 </div>
                 <div className="col-md-4 chat-box">
+                            {
+                                isManager && <button onClick={() => socket.emit('game start', { roomCode: roomCode })}>게임 시작</button>
+                            }
                     <div className="chat-logs" ref={chatLogsRef}>
                         {
                             chatLogs.map((chat, idx) => {
                                 if (chat.socketId === user.socketId)
-                                    return <MyChat key={ idx }>{ chat.msg }</MyChat>
+                                    return <MyChat 
+                                                isPrimary={ chat.isAnswer }
+                                                key={ idx }
+                                            >{ chat.msg }</MyChat>
                                 
                                 return <Chat
                                             profileNum={ chat.profileNum }
                                             author={ chat.author }
+                                            isPrimary={ chat.isAnswer }
                                             key={ idx }
                                         >
                                             { chat.msg }
