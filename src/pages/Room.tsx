@@ -10,7 +10,7 @@ import { BeforeButton } from '../components/Button/Button';
 import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinner/Spinner';
 import { Chat, MyChat } from '../components/Chat/Chat';
 import { Tag } from '../components/Tag/Tag';
-
+import { ProfileSM } from '../components/Profile/Profile'
 
 type RoomProps = {
     socket: Socket
@@ -19,6 +19,7 @@ type RoomProps = {
 type UserType = {
     nickname: string
     profile: number
+    color: number
     socketId: string
     answer: number 
 };
@@ -28,6 +29,7 @@ type ChatType = {
     socketId: string
     author: string
     profileNum: number
+    color: number
     isAnswer: boolean
 }
 
@@ -80,8 +82,6 @@ const Room = ({ socket } : RoomProps) => {
     // }, [time]);
 
     React.useEffect(() => {
-        console.log('IIIIIIIINNNNNNNIIIIIIIITTTTTTTT');
-
         if (chatLogsRef.current) {
             chatLogsRef.current.addEventListener('DOMNodeInserted', e => {
                 chatLogsRef.current?.scroll({
@@ -95,6 +95,7 @@ const Room = ({ socket } : RoomProps) => {
         someoneJoin({
             nickname: user.nickname,
             profile: user.profile,
+            color: user.color,
             socketId: user.socketId,
             answer: 0
         });
@@ -161,8 +162,8 @@ const Room = ({ socket } : RoomProps) => {
         })
 
         if (nowTime === 0) {
-            console.log('TIME 0000000000000');
-            socket.emit('request next', { roomCode: roomCode });
+            if (isManager)
+                socket.emit('request next', { roomCode: roomCode });
             clearInterval(timeMng);
         }
 
@@ -176,6 +177,7 @@ const Room = ({ socket } : RoomProps) => {
         setUserList(beforeList => [...beforeList, {
             nickname: data.nickname,
             profile: data.profile,
+            color: data.color,
             socketId: data.socketId,
             answer: 0
         }]);
@@ -204,20 +206,23 @@ const Room = ({ socket } : RoomProps) => {
     }
     function receiveChat(data: ChatType) {
         if (data.isAnswer) {
-            console.log('receiveChat - correct !!!!!!!!!');
             setUserList((beforeUserList) => {
-                return [...beforeUserList.map(e => {
+                let newUserList = [...beforeUserList.map(e => {
                     return {
                         ...e,
                         answer: (e.socketId === data.socketId) ? e.answer + 1 : e.answer
                     }
-                    // if (e.socketId === data.socketId) {
-                    //     console.log('SET USER LIST !!!!!!!!!');
-                    //     e.answer++;
-                    // }
-                    // return e;
-                })]
+                })];
+
+                newUserList.sort((a, b) => {
+                    if (a.answer > b.answer) return 1;
+                    else if (a.answer < b.answer) return -1;
+                    return 0;
+                });
+
+                return newUserList;
             });
+            
             setAnswerUser(data.author);
         }
 
@@ -226,6 +231,7 @@ const Room = ({ socket } : RoomProps) => {
             socketId: data.socketId,
             author: data.author,
             profileNum: data.profileNum,
+            color: data.color,
             isAnswer: data.isAnswer
         }]);
     }
@@ -240,7 +246,8 @@ const Room = ({ socket } : RoomProps) => {
             msg: msg,
             socketId: user.socketId,
             author: user.nickname,
-            profileNum: user.profile
+            profileNum: user.profile,
+            color: user.color
         });
 
         setMsg('');
@@ -254,7 +261,7 @@ const Room = ({ socket } : RoomProps) => {
                     className="song-video"
                     id="player" 
                     width="560" height="315"
-                    src={`https://www.youtube.com/embed/${songData?.code}?autoplay=1`}
+                    src={`https://www.youtube.com/embed/${songData?.code}?autoplay=1&start=${songData.start}`}
                     title="YouTube video player" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 ></iframe>
@@ -268,7 +275,8 @@ const Room = ({ socket } : RoomProps) => {
                         {
                             userList.map((e) => {
                                 return  <div className="player-info" key={e.socketId}>
-                                            <div className="player-color"></div>
+                                            {/* <div className="player-color"></div> */}
+                                            <ProfileSM profileNum={e.profile} color={e.color}></ProfileSM>
                                             <p className="player-name">
                                                 {e.nickname}<span className="player-score"> {e.answer} </span>
                                             </p>
@@ -316,9 +324,9 @@ const Room = ({ socket } : RoomProps) => {
 
                 </div>
                 <div className="col-md-4 chat-box">
-                            {
-                                isManager && <button onClick={() => socket.emit('game start', { roomCode: roomCode })}>게임 시작</button>
-                            }
+                    {
+                        isManager && <button onClick={() => socket.emit('game start', { roomCode: roomCode })}>게임 시작</button>
+                    }
                     <div className="chat-logs" ref={chatLogsRef}>
                         {
                             chatLogs.map((chat, idx) => {
@@ -330,6 +338,7 @@ const Room = ({ socket } : RoomProps) => {
                                 
                                 return <Chat
                                             profileNum={ chat.profileNum }
+                                            color={ chat.color }
                                             author={ chat.author }
                                             isPrimary={ chat.isAnswer }
                                             key={ idx }

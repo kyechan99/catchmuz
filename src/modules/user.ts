@@ -7,9 +7,9 @@ export const setNickname = (name: string) => ({
     payload: name
 });
 
-export const setProfile = (profileNum: number) => ({
+export const setProfile = (profileNum: number, colorNum: number) => ({
     type: PROFILE,
-    payload: profileNum
+    payload: { profileNum , colorNum }
 });
 
 export const setSocketId = (socketId: string) => ({
@@ -26,12 +26,14 @@ type UserAction =
 type UserState = {
     nickname: string
     profile: number
+    color: number
     socketId: string
 };
 
 const initialState: UserState = {
     nickname: '',
     profile: 1,
+    color: 1,
     socketId: ''
 };
 
@@ -44,7 +46,8 @@ function user(
             state.nickname = action.payload;
             return state;
         case PROFILE:
-            state.profile = action.payload;
+            state.profile = action.payload.profileNum;
+            state.color = action.payload.colorNum;
             return state;
         case SOCKET_ID:
             state.socketId = action.payload;
