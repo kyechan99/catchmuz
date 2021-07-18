@@ -41,6 +41,9 @@ type SongType = {
     answer: string[]
 }
 
+const PLAY_TIME = 15;
+const WAITING_TIME = 10;
+
 const Room = ({ socket } : RoomProps) => {
     const history = useHistory();
     // let roomSongTags : string[] = [];
@@ -99,6 +102,7 @@ const Room = ({ socket } : RoomProps) => {
 
         socket.on('game start', gameStart);
         socket.on('next song', nextSong);
+        socket.on('answer song', answerSong);
         socket.on('game end', gameEnd);
         
         // 방 입장 확인 | 방장일 경우 반환 되지 않음
@@ -123,6 +127,7 @@ const Room = ({ socket } : RoomProps) => {
 
             socket.off('game start', gameStart);
             socket.off('next song', nextSong);
+            socket.off('answer song', answerSong);
             socket.off('game end', gameEnd);
 
             socket.off('join room', joinRoom);
@@ -139,11 +144,23 @@ const Room = ({ socket } : RoomProps) => {
     }
     function nextSong(data: SongType) {
         console.log('NEXT SONG', data);
-        setTime(  15  );
+        setTime( PLAY_TIME + WAITING_TIME );
         setSongData(data);
         setAnswerUser('');
         clearInterval(timeMng);
         timeMng = setInterval(timeCounting, 1000);
+    }
+    function answerSong(data: SongType) {
+        console.log('ANSWER SONG', data);
+        
+        // 정답 제출시간 전에 정답자가 있다면 유지. 아니라면 결과창을 보여주기 위해 빈 유저 변경
+        setAnswerUser(before => {
+            if (before === '')
+                return ' ';
+            return before;
+        });
+
+        setSongData(data);
     }
     function gameEnd() {
         setSongData(null);
@@ -157,18 +174,26 @@ const Room = ({ socket } : RoomProps) => {
             return dT;
         })
 
-        if (nowTime === 0) {
-            let temp = false;
-            setManager(t => {
-                temp = t;
-                return t;
-            });
-            if (temp) {
+        let isMng = false;
+        setManager(t => {
+            isMng = t;
+            return t;
+        }); 
+
+        // 노래 못맞춤. 기다리는 시간동안 정답 알 수 있게 요청
+        if (nowTime === WAITING_TIME && isMng) {
+            console.log('req next');
+            socket.emit('request answer', { roomCode: roomCode });
+        }
+        // 모두 기다렸으니 다음 노래로 넘어가기
+        else if (nowTime === 0) {
+            if (isMng) {
                 console.log('req next');
                 socket.emit('request next', { roomCode: roomCode });
             }
             clearInterval(timeMng);
         }
+        
 
         console.log(nowTime);
     }
@@ -229,8 +254,8 @@ const Room = ({ socket } : RoomProps) => {
                 })];
 
                 newUserList.sort((a, b) => {
-                    if (a.answer > b.answer) return 1;
-                    else if (a.answer < b.answer) return -1;
+                    if (a.answer < b.answer) return 1;
+                    else if (a.answer > b.answer) return -1;
                     return 0;
                 });
 
@@ -289,10 +314,10 @@ const Room = ({ socket } : RoomProps) => {
                         {
                             userList.map((e) => {
                                 return  <div className="player-info" key={e.socketId}>
-                                            {/* <div className="player-color"></div> */}
                                             <ProfileSM profileNum={e.profile} color={e.color}></ProfileSM>
                                             <p className="player-name">
-                                                {e.nickname}<span className="player-score"> {e.answer} </span>
+                                                {e.nickname}
+                                                <span className="player-score"> {e.answer} </span>
                                             </p>
                                         </div>
                             })
@@ -301,13 +326,16 @@ const Room = ({ socket } : RoomProps) => {
                     
                     <p className="remaining-songs">{playedSong} / 10</p>
 
-                    {
-                        (songData != null && answerUser !== '') &&
                         <div className="answer-group">
-                            <h3 className="answer-member">정답자 : {answerUser}</h3>
-                            <h2 className="answer-song">{ songData.name }</h2>
+                            {
+                                (songData != null && answerUser !== '' && answerUser !== ' ') &&
+                                <h3 className="answer-member">정답자 : {answerUser}</h3>
+                            }
+                            {
+                                (songData != null && answerUser !== '') &&
+                                <h2 className="answer-song">{ songData.name }</h2>
+                            }
                         </div>
-                    }
 
                     <div className="spinner-parent">
                         <SpinnerSM></SpinnerSM>
@@ -317,7 +345,13 @@ const Room = ({ socket } : RoomProps) => {
                         <svg className="play-icon" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 11L6 4L10.5 7.5L6 11Z" fill="currentColor"></path>
                         </svg>
-                        <p className="timer">{time} 초</p>
+                        <p className="timer">
+                            {
+                                time - WAITING_TIME > 0 ? 
+                                    time - WAITING_TIME + ' 초': 
+                                    `다음 노래를 기다려주세요 (${time})`
+                            }
+                        </p>
                     </div>
 
                     {
@@ -329,9 +363,6 @@ const Room = ({ socket } : RoomProps) => {
                                         return <Tag key={tag} className={ roomSongTags.includes(tag) ? 'tag-primary' : ''}>{tag}</Tag>
                                     })
                                 }
-                                {/* <Tag className={'tag-primary'}>힙합</Tag>
-                                <Tag className={'tag-primary'}>2020</Tag>
-                                <Tag>트렌드</Tag> */}
                             </div>
                         </div>
                     }
