@@ -8,7 +8,7 @@ type ProfileProps = {
     color? : number
 }
 
-export const Profile = ({ profileNum, children, className, color = 1 } : ProfileProps) => {
+export const Profile = ({ profileNum, children, className = '', color = 1 } : ProfileProps) => {
     return (
         <div
             className={ `profile profile-${color} ` + className }
@@ -22,7 +22,7 @@ export const Profile = ({ profileNum, children, className, color = 1 } : Profile
     )
 }
 
-export const ProfileSM = ({ profileNum, className, color = 1 } : ProfileProps) => {
+export const ProfileSM = ({ profileNum, className = '', color = 1 } : ProfileProps) => {
     return (
         <Profile
             className={ "profile-sm " + className }

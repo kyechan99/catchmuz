@@ -147,22 +147,22 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
                     !isCustomMode &&
                     <div className="fast-select-list">
                         <ImgButton
-                            clicked={()=> setSelectTags(['슬픈 발라드'])}
-                            isActive={selectTags.includes('슬픈 발라드')}
+                            clicked={()=> setSelectTags(['TOP100'])}
+                            isActive={selectTags.includes('TOP100')}
                             src="https://music-phinf.pstatic.net/20190717_231/1563371969001XG9e6_PNG/dj_3_genre_5.png?type=f360">
                         </ImgButton>
                         <ImgButton
-                            clicked={()=> setSelectTags(['요즘 국힙'])}
-                            isActive={selectTags.includes('요즘 국힙')}
+                            clicked={()=> setSelectTags(['힙합'])}
+                            isActive={selectTags.includes('힙합')}
                             src="https://music-phinf.pstatic.net/20190717_19/1563371989398zXTlJ_PNG/dj_3_genre_7.png?type=f360">
                         </ImgButton>
                         <ImgButton
-                            clicked={()=> setSelectTags(['90년대 가요'])}
-                            isActive={selectTags.includes('90년대 가요')}
+                            clicked={()=> setSelectTags(['여자 아이돌'])}
+                            isActive={selectTags.includes('여자 아이돌')}
                             src="https://music-phinf.pstatic.net/20190717_71/1563372076149daOFL_PNG/dj_3_genre_15.png?type=f360">
                         </ImgButton>
                         <ImgButton
-                            clicked={()=> setSelectTags(['90년대 POP'])}
+                            clicked={()=> setSelectTags(['추억의그노래'])}
                             isActive={selectTags.includes('90년대 POP')}
                             src="https://music-phinf.pstatic.net/20190717_25/1563372086749r0Jfe_PNG/dj_3_genre_16.png?type=f360">
                         </ImgButton>

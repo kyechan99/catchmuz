@@ -17,6 +17,13 @@ const Index = () => {
     const [ colorNum, setColorNum ] = React.useState<number>(1);
     const history = useHistory();
 
+    React.useEffect(() => {
+        let randNum = Math.floor(Math.random() * 15) + 1;
+        setColorNum(randNum);
+        randNum = Math.floor(Math.random() * 17) + 1;
+        setProfileNum(randNum);
+    }, [])
+
     function goToLobby() {
         if (nickname.replace(/\s/g, '') === '')
             return;
@@ -26,11 +33,8 @@ const Index = () => {
     }
 
     function changeProfile() {
-        setColorNum(bT => {
-            if (bT >= 5)
-                return 1;
-            return bT + 1;
-        });
+        let randColorNum = Math.floor(Math.random() * 15) + 1;
+        setColorNum(randColorNum);
 
         setProfileNum(bT => {
             if (bT >= 17)

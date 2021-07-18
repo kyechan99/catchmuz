@@ -1,9 +1,9 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import './Room.scss';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useStore } from 'react-redux';
 import { RootState } from '../modules';
 
 import { BeforeButton } from '../components/Button/Button';
@@ -42,6 +42,10 @@ type SongType = {
 }
 
 const Room = ({ socket } : RoomProps) => {
+    const history = useHistory();
+    // let roomSongTags : string[] = [];
+    const [roomSongTags, setRoomSongTags] = React.useState<string[]>([]);
+
     const user = useSelector((state: RootState) => state.user);
 
     // TODO : 비정상적 루트로 방으로 들어왔을때 강퇴 (웹 지원하게 될시 필요함. 현재 electron 빌드에선 불필요)
@@ -64,22 +68,11 @@ const Room = ({ socket } : RoomProps) => {
     const [userList, setUserList] = React.useState<UserType[]>([]);
     // 방장인지
     const [isManager, setManager] = React.useState<boolean>(false);
+    const [isPlaying, setPlaying] = React.useState<boolean>(false);
 
     const [songData, setSongData] = React.useState<SongType | null>(null);
     const [answerUser, setAnswerUser] = React.useState<string>('');
     // const [songNum, setSongNum] = React.useState<number>({});
-
-    // React.useEffect(() => {
-    //     const countdown = setInterval(() => {
-    //       if (time > 0) {
-    //         setTime(time - 1);
-    //       }
-    //       if (time === 0) {
-    //         clearInterval(countdown);
-    //       }
-    //     }, 1000);
-    //     return () => clearInterval(countdown);
-    // }, [time]);
 
     React.useEffect(() => {
         if (chatLogsRef.current) {
@@ -111,7 +104,8 @@ const Room = ({ socket } : RoomProps) => {
         // 방 입장 확인 | 방장일 경우 반환 되지 않음
         socket.on('join room', joinRoom);
         socket.on('your manager', manager);
-        
+        socket.on('forced exit', forcedExit);
+
         // 서버에게 방 입장했다고 알림
         socket.emit('join room', {
             roomCode: roomCode,
@@ -133,6 +127,7 @@ const Room = ({ socket } : RoomProps) => {
 
             socket.off('join room', joinRoom);
             socket.off('your manager', manager);
+            socket.off('forced exit', forcedExit);
         }
     }, []);
 
@@ -140,7 +135,7 @@ const Room = ({ socket } : RoomProps) => {
     //==== Game Manager ===================================================================
     let timeMng: NodeJS.Timer;
     function gameStart(data: any) {
-
+        setPlaying(true);
     }
     function nextSong(data: SongType) {
         console.log('NEXT SONG', data);
@@ -152,6 +147,7 @@ const Room = ({ socket } : RoomProps) => {
     }
     function gameEnd() {
         setSongData(null);
+        setPlaying(false);
     }
     function timeCounting() {
         let nowTime = 10000;
@@ -162,8 +158,15 @@ const Room = ({ socket } : RoomProps) => {
         })
 
         if (nowTime === 0) {
-            if (isManager)
+            let temp = false;
+            setManager(t => {
+                temp = t;
+                return t;
+            });
+            if (temp) {
+                console.log('req next');
                 socket.emit('request next', { roomCode: roomCode });
+            }
             clearInterval(timeMng);
         }
 
@@ -189,14 +192,25 @@ const Room = ({ socket } : RoomProps) => {
             return (e.socketId !== data.socketId);
         })]);
     }
-    function joinRoom(data: UserType[]) {
+    function joinRoom(data: UserType[], tags: string[]) {
         setUserList(beforeUserList => [...beforeUserList, ...data.map(e => {
             e.answer = 0;
             return e;
         })]);
+
+        setRoomSongTags(tags);
+        // roomSongTags = tags;
+        console.log('TAGS : ', roomSongTags);
     }
-    function manager() {
+    function manager(tags: string[]) {
         setManager(true);
+
+        setRoomSongTags(tags);
+        // roomSongTags = tags;
+        console.log('TAGS : ', roomSongTags);
+    }
+    function forcedExit() {
+        history.push('/');
     }
 
 
@@ -312,7 +326,7 @@ const Room = ({ socket } : RoomProps) => {
                             <div className="song-tags">
                                 {
                                     songData.tags.map((tag) => {
-                                        return <Tag key={tag}>{tag}</Tag>
+                                        return <Tag key={tag} className={ roomSongTags.includes(tag) ? 'tag-primary' : ''}>{tag}</Tag>
                                     })
                                 }
                                 {/* <Tag className={'tag-primary'}>힙합</Tag>
@@ -325,7 +339,7 @@ const Room = ({ socket } : RoomProps) => {
                 </div>
                 <div className="col-md-4 chat-box">
                     {
-                        isManager && <button onClick={() => socket.emit('game start', { roomCode: roomCode })}>게임 시작</button>
+                        (isManager && !isPlaying) && <button onClick={() => socket.emit('game start', { roomCode: roomCode })}>게임 시작</button>
                     }
                     <div className="chat-logs" ref={chatLogsRef}>
                         {
