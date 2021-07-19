@@ -7,21 +7,13 @@
     align-content: center;
     align-items: center;
 
-    .index-title {
-        margin-bottom: 0px;
-        &.title-1 {
-            padding-top: 10%;
-            font-size: 5rem;
-            line-height: 5rem;
-        }
-        &.title-2 {
-            font-size: 4rem;
-            line-height: 4rem;
-        }
+    .index-logo {
+        padding-top: 8%;
+        width: 30%;
     }
-
+    
     .index-input-profile {
-        margin-top: 5rem;
+        margin-top: 7rem;
         .btn-profile {
             padding: 0;
             cursor: pointer;

@@ -6,11 +6,14 @@ import './Room.scss';
 import { useSelector, useStore } from 'react-redux';
 import { RootState } from '../modules';
 
-import { BeforeButton } from '../components/Button/Button';
+import { BeforeButton, PrimaryButton, PointButton } from '../components/Button/Button';
 import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinner/Spinner';
 import { Chat, MyChat } from '../components/Chat/Chat';
 import { Tag } from '../components/Tag/Tag';
 import { ProfileSM } from '../components/Profile/Profile'
+import { setProfile } from '../modules/user';
+
+import LogoImg from '../assets/catchmuz_icon.png';
 
 type RoomProps = {
     socket: Socket
@@ -42,7 +45,7 @@ type SongType = {
 }
 
 const PLAY_TIME = 15;
-const WAITING_TIME = 10;
+const WAITING_TIME = 5;
 
 const Room = ({ socket } : RoomProps) => {
     const history = useHistory();
@@ -56,9 +59,10 @@ const Room = ({ socket } : RoomProps) => {
     const { roomCode } = useParams<{ roomCode: string }>();
 
     // 현재까지 진행한 노래 수
-    const [playedSong, setPlayedSong] = React.useState<number>(1);
+    const [playedSong, setPlayedSong] = React.useState<number>(0);
+    const [songLength, setSongLength] = React.useState<number>(0);
     // 타이머
-    const [time, setTime] = React.useState<number>(100);
+    const [time, setTime] = React.useState<number>(0);
 
     // 채팅 내역
     const [chatLogs, setChatLogs] = React.useState<ChatType[]>([]);
@@ -140,10 +144,21 @@ const Room = ({ socket } : RoomProps) => {
     //==== Game Manager ===================================================================
     let timeMng: NodeJS.Timer;
     function gameStart(data: any) {
+        setPlayedSong(0);
+        setSongLength(data.songLength);
+        setTime( 0 );
+        setSongData(null);
+        setAnswerUser('');
         setPlaying(true);
+        setUserList(list => 
+            [...list.map(e => {
+                e.answer = 0;
+                return e;
+            })]
+        );
     }
     function nextSong(data: SongType) {
-        console.log('NEXT SONG', data);
+        setPlayedSong(before => before + 1);
         setTime( PLAY_TIME + WAITING_TIME );
         setSongData(data);
         setAnswerUser('');
@@ -235,7 +250,7 @@ const Room = ({ socket } : RoomProps) => {
         console.log('TAGS : ', roomSongTags);
     }
     function forcedExit() {
-        history.push('/');
+        history.push('/lobby');
     }
 
 
@@ -307,10 +322,13 @@ const Room = ({ socket } : RoomProps) => {
             }
 
             <div className="row">
-                <div className="col-md-8 main">
-                    <BeforeButton></BeforeButton>
+                <div className="col-md-11 main">
+                    {
+                        !isPlaying && 
+                        <BeforeButton></BeforeButton>
+                    }
 
-                    <div className="player-list">
+                    <div className={`player-list ${ isPlaying ? 'remove-margin': '' }`}>
                         {
                             userList.map((e) => {
                                 return  <div className="player-info" key={e.socketId}>
@@ -324,32 +342,46 @@ const Room = ({ socket } : RoomProps) => {
                         }
                     </div>
                     
-                    <p className="remaining-songs">{playedSong} / 10</p>
+                    {
+                        playedSong > 0 &&
+                        <p className="remaining-songs">{playedSong} / {songLength}</p>
+                    }
 
-                        <div className="answer-group">
-                            {
-                                (songData != null && answerUser !== '' && answerUser !== ' ') &&
-                                <h3 className="answer-member">정답자 : {answerUser}</h3>
-                            }
-                            {
-                                (songData != null && answerUser !== '') &&
-                                <h2 className="answer-song">{ songData.name }</h2>
-                            }
-                        </div>
+                    <div className="answer-group">
+                        {
+                            (songData != null && answerUser !== '' && answerUser !== ' ') &&
+                            <h3 className="answer-member">정답자 : {answerUser}</h3>
+                        }
+                        {
+                            (songData != null && answerUser !== '') &&
+                            <h2 className="answer-song">{ songData.name }</h2>
+                        }
+                    </div>
 
                     <div className="spinner-parent">
                         <SpinnerSM></SpinnerSM>
                         <SpinnerMD></SpinnerMD>
                         <SpinnerLG></SpinnerLG>
                         <SpinnerXL></SpinnerXL>
-                        <svg className="play-icon" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
+                        {
+                            (isManager && !isPlaying) && 
+                            <PrimaryButton 
+                                className="btn-start"
+                                clicked={() => socket.emit('game start', { roomCode: roomCode })}
+                            >
+                                게임 시작
+                            </PrimaryButton>
+                        }
+                        <img className="play-icon" src={LogoImg} alt="logo-img"/>
+                        {/* <svg className="play-icon" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 11L6 4L10.5 7.5L6 11Z" fill="currentColor"></path>
-                        </svg>
+                        </svg> */}
                         <p className="timer">
                             {
-                                time - WAITING_TIME > 0 ? 
+                                time !== 0 &&
+                                (time - WAITING_TIME > 0 ? 
                                     time - WAITING_TIME + ' 초': 
-                                    `다음 노래를 기다려주세요 (${time})`
+                                    `다음 노래를 기다려주세요 (${time})`)
                             }
                         </p>
                     </div>
@@ -368,10 +400,7 @@ const Room = ({ socket } : RoomProps) => {
                     }
 
                 </div>
-                <div className="col-md-4 chat-box">
-                    {
-                        (isManager && !isPlaying) && <button onClick={() => socket.emit('game start', { roomCode: roomCode })}>게임 시작</button>
-                    }
+                <div className="col-md-5 chat-box">
                     <div className="chat-logs" ref={chatLogsRef}>
                         {
                             chatLogs.map((chat, idx) => {

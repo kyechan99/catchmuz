@@ -13,7 +13,8 @@ function createWindow () {
     resizable: false,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    icon: path.join(__dirname, './icons/icon.ico')
   });
 
   mainWindow.loadURL(

@@ -9,6 +9,9 @@ import { InputNickname } from '../components/Input/Input';
 
 import { Profile } from '../components/Profile/Profile';
 
+import LogoImg from '../assets/catchmuz_logo.png';
+
+
 const Index = () => {
     const dispatch = useDispatch();
 
@@ -25,7 +28,7 @@ const Index = () => {
     }, [])
 
     function goToLobby() {
-        if (nickname.replace(/\s/g, '') === '')
+        if (nickname.replace(/\s/g, '') === '' || nickname.length > 10)
             return;
         dispatch({type : 'user/NICKNAME', payload: nickname});
         dispatch({type : 'user/PROFILE', payload: { profileNum, colorNum } });
@@ -45,8 +48,7 @@ const Index = () => {
 
     return (
         <div className="index-page">
-            <h1 className="index-title title-1">CATCH</h1>
-            <h1 className="index-title title-2">MUZ</h1>
+            <img className="index-logo" src={LogoImg} alt="logo-img"/>
 
             <div className="index-input-profile">
                 <button className="btn-profile" onClick={changeProfile}>

@@ -9,6 +9,12 @@ import { RootState } from '../modules';
 import { BeforeButton, PointButton, TagButton, ImgButton } from '../components/Button/Button';
 import { InputGroup } from '../components/Input/Input';
 
+import BaladMode from '../assets/mode/balad.png'
+import HiphopMode from '../assets/mode/hiphop.png'
+import GirlGroupMode from '../assets/mode/girlgroup.png'
+import Top100Mode from '../assets/mode/top100.png'
+import OldSeriesMode from '../assets/mode/oldseries.png'
+
 type CreateRoomProps = {
     socket: Socket
 }
@@ -147,29 +153,29 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
                     !isCustomMode &&
                     <div className="fast-select-list">
                         <ImgButton
-                            clicked={()=> setSelectTags(['TOP100'])}
-                            isActive={selectTags.includes('TOP100')}
-                            src="https://music-phinf.pstatic.net/20190717_231/1563371969001XG9e6_PNG/dj_3_genre_5.png?type=f360">
+                            clicked={()=> setSelectTags(['발라드'])}
+                            isActive={selectTags.includes('발라드')}
+                            src={BaladMode}>
                         </ImgButton>
                         <ImgButton
                             clicked={()=> setSelectTags(['힙합'])}
                             isActive={selectTags.includes('힙합')}
-                            src="https://music-phinf.pstatic.net/20190717_19/1563371989398zXTlJ_PNG/dj_3_genre_7.png?type=f360">
+                            src={HiphopMode}>
                         </ImgButton>
                         <ImgButton
                             clicked={()=> setSelectTags(['여자 아이돌'])}
                             isActive={selectTags.includes('여자 아이돌')}
-                            src="https://music-phinf.pstatic.net/20190717_71/1563372076149daOFL_PNG/dj_3_genre_15.png?type=f360">
+                            src={GirlGroupMode}>
+                        </ImgButton>
+                        <ImgButton
+                            clicked={()=> setSelectTags(['TOP100'])}
+                            isActive={selectTags.includes('TOP100')}
+                            src={Top100Mode}>
                         </ImgButton>
                         <ImgButton
                             clicked={()=> setSelectTags(['추억의그노래'])}
-                            isActive={selectTags.includes('90년대 POP')}
-                            src="https://music-phinf.pstatic.net/20190717_25/1563372086749r0Jfe_PNG/dj_3_genre_16.png?type=f360">
-                        </ImgButton>
-                        <ImgButton
-                            clicked={()=> setSelectTags(['여자 아이돌'])}
-                            isActive={selectTags.includes('여자 아이돌')}
-                            src="https://music-phinf.pstatic.net/20190717_279/1563371941301koKcB_PNG/dj_3_genre_3.png?type=f360">
+                            isActive={selectTags.includes('추억의그노래')}
+                            src={OldSeriesMode}>
                         </ImgButton>
                     </div>
                 }
@@ -203,7 +209,7 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
             }
             
             <div className="create-mng-list">
-                <PointButton className={ (selectTags.length === 0) ? "disabled" : "" } clicked={createRoom}>
+                <PointButton disabled={ selectTags.length === 0 } clicked={createRoom}>
                     <svg className="create-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="#FFFFFF">
                         <path fillRule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM0 8a8 8 0 1116 0A8 8 0 010 8zm11.78-1.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z">
                         </path>

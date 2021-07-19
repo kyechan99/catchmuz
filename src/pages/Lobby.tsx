@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import './Lobby.scss';
 
-import { useSelector } from 'react-redux';
-import { RootState } from '../modules';
-
-import { PointButton } from '../components/Button/Button';
+import { Button, PointButton } from '../components/Button/Button';
 import { RoomMenu } from '../components/Room/RoomMenu';
 
 type LobbyProps = {
@@ -25,7 +22,6 @@ type RoomType = {
 }
 
 const Lobby = ({ socket } : LobbyProps) => {
-    const user = useSelector((state: RootState) => state.user);
     const [roomList, setRoomList] = React.useState<RoomType>({});
 
     React.useEffect(() => {
@@ -50,26 +46,32 @@ const Lobby = ({ socket } : LobbyProps) => {
 
     return (
         <div className="container">            
-            <h1>Lobby{ user.nickname } </h1>
+            <h1 className="lobby-title">로비</h1>
+
+            <div className="lobby-menu">
+                <Button clicked={getRoomList}>
+                    새로고침
+                </Button>
+                <Link to="/create" className="btn-create-room">
+                    <PointButton>
+                        방 생성하기
+                    </PointButton>
+                </Link>
+            </div>
 
             <div className="room-list">
                 {
-                    roomList && Object.keys(roomList).map((objectKey) => {
+                    roomList ?
+                    Object.keys(roomList).map((objectKey) => {
                         return <RoomMenu to={`/room/${objectKey}`} curMem={roomList[objectKey].curUserNum} maxMem={roomList[objectKey].maxUserNum} key={objectKey}>
                             {
                                 roomList[objectKey].songTags.map(tag => `#${tag} `)
                             }
                         </RoomMenu>
                     })
+                    :
+                    <p>생성된 방이 없습니다.</p>
                 }
-            </div>
-
-            <div className="lobby-menu">
-                <Link to="/create" className="btn-create-room">
-                    <PointButton>
-                        방 생성하기
-                    </PointButton>
-                </Link>
             </div>
         </div>
     )

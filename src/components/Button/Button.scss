@@ -3,11 +3,12 @@
 .btn {
     cursor: pointer;
     padding: .5rem 1rem;
-    font-size: 1rem;
+    font-size: .9rem;
     border: none;
     border-radius: .25rem;
-    background-color: $secondary;
+    background-color: $light;
     transition: background-color ease .5s;
+    font-family: 'Noto Sans KR', sans-serif;
     &.btn-primary {
         color: white;
         background-color: $primary;
@@ -43,11 +44,15 @@
         color: white;
         background-color: $un-selected-color;
         margin: .5rem;
+        font-weight: 200;
         &:not(:disabled):not(.disabled):hover {
             background-color: darken($un-selected-color, 5%);
         }
         &.tag-selected {
             background-color: $primary;
+            &:not(:disabled):not(.disabled):hover { 
+                background-color: darken($primary, 5%);
+            }
         }
     }
     &.btn-img {

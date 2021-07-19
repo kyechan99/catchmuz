@@ -12,7 +12,7 @@ export const InputNickname = ({ onChange } : InputProps) => {
             onChange={(e) => { 
                 onChange(e.target.value);
             }}
-            placeholder="닉네임을 입력해주세요."
+            placeholder="닉네임 (최대 10글자)"
         />
     )
 }

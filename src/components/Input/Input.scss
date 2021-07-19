@@ -2,8 +2,10 @@
 
 .input-nickname {
     margin-top: 1rem;
-    padding: .75rem 1rem;
+    padding: .625rem 1rem;
     font-size: 1rem;
+    font-weight: 200;
+    font-family: 'Noto Sans KR';
     color: white;
 
     background: rgba( 255, 255, 255, 0.35 );
@@ -29,6 +31,7 @@
     margin-bottom: 1rem;
     width: 30rem;
     .input-label {
+        font-weight: 300    ;
         font-size: 1.5rem;
     }
     .input-number {

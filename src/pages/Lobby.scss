@@ -1,13 +1,18 @@
 @import '/src/_variables.scss';
 
+.lobby-title {
+    margin-top: 2rem;
+}
+
 .room-list {
     padding: 5rem 10rem 5rem 10rem;
 }
 
 .btn-create-room {
-    margin: 0 auto;
+    margin-left: 1rem;
 }
 
 .lobby-menu {
     display: flex;
+    justify-content: flex-end;
 }

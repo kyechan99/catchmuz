@@ -7,18 +7,21 @@
     display: inline-block;
     box-sizing: border-box;
     border-bottom-color: $spinner;
+    z-index: $Z-SPINNER;
     &.spinner-sm {
         width: 8rem;
         height: 8rem;
         animation: rotation 1.5s linear infinite;
         border-top-color: $spinner;
+        opacity: .9;
     }
     &.spinner-md {
         width: 12rem;
         height: 12rem;
         border-width: 8px;
         border-left-color: $spinner;
-        animation: rotation 3s linear infinite;
+        animation: rotation-reverse 3s linear infinite;
+        opacity: .75;
     }
     &.spinner-lg {
         width: 16rem;
@@ -27,6 +30,7 @@
         border-right-color: $spinner;
         border-left-color: $spinner;
         animation: rotation 6.5s linear infinite;
+        opacity: .65;
     }
     &.spinner-xl {
         width: 20em;
@@ -34,10 +38,19 @@
         border-width: 12px;
         border-right-color: $spinner;
         border-left-color: $spinner;
-        animation: rotation 10s linear infinite;
+        animation: rotation-reverse 10s linear infinite;
+        opacity: .5;
     }
 }
 
+@keyframes rotation-reverse {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(-360deg);
+    }
+} 
 @keyframes rotation {
     0% {
         transform: rotate(0deg);

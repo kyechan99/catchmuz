@@ -13,16 +13,21 @@
         position: fixed;
         top: 6rem;
         left: 2rem;
+        z-index: $Z-UI;
+        &.remove-margin {
+            top: 2rem;
+        }
         .player-info {
             display: flex;
             align-items: center;
             margin-bottom: .75rem;
             .player-name {
-                opacity: .5;
+                font-weight: 300;
                 margin: 0rem 0rem 0rem .75rem;
+                opacity: .5;
             }
             .player-score {
-                font-weight: bold;
+                font-weight: 500;
                 margin-left: .5rem;
             }
         }
@@ -39,33 +44,47 @@
     }
 
     .answer-group {
-        position: relative;
+        position: absolute;
         left: 50%;
-        top: 15%;
-        transform: translate(-50%, -15%);
+        top: calc(50% - 12rem);
+        transform: translate(-50%, -50%);
         text-align: center;
         cursor: default;
+        z-index: $Z-ANSWER;
         .answer-member {
             margin: 0px;
+            z-index: $Z-ANSWER;
         }
         .answer-song {
             margin: 0px;
             color: $point;
+            z-index: $Z-ANSWER;
         }
     }
 
     .spinner-parent {
-        position: relative;
+        position: absolute;
         left: 50%;
-        top: 40%;
-        transform: translate(-50%, -40%);
+        top: 50%;
+        transform: translate(-50%, -50%);
         display: flex;
         align-content: center;
         align-items: center;
         justify-content: center;
+        .btn-start {
+            position: absolute;
+            top: calc(50% + 12rem);
+            z-index: $Z-UI;
+        }
         .play-icon {
-            width: 140px;
-            height: 140px;
+            margin-top: 4px;
+            margin-left: 4px;
+            opacity: .9;
+            width: 85px;
+            height: 85px;
+            // width: 140px;
+            // height: 140px;
+            z-index: $Z-SPINNER;
             path {
                 fill: $spinner;
             }
@@ -73,24 +92,29 @@
         .timer {
             margin: 0px;
             position: absolute;
-            font-size: 1.25rem;
+            font-size: 1rem;
+            font-weight: 300;
             top: calc(50% + 3rem);
+            white-space: nowrap;
             cursor: default;
+            opacity: .5;
+            z-index: $Z-ANSWER;
         }
     }
 
     .song-info {
-        position: relative;
+        position: absolute;
         left: 50%;
-        top: 52%;
-        transform: translate(-50%, -52%);
+        top: calc(50% + 12rem);
+        transform: translate(-50%, -50%);
         .song-tags {
-            width: 30rem;
+            width: 35rem;
             margin: 0 auto;
             display: flex;
             flex-wrap: wrap;
             flex-direction: row;
             justify-content: center;
+            z-index: $Z-UI;
         }
     }
 }

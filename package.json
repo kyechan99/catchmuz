@@ -1,5 +1,5 @@
 {
-  "name": "catchsong",
+  "name": "catchmuz",
   "version": "0.1.0",
   "private": true,
   "main": "public/electron.js",
@@ -30,8 +30,52 @@
     "react-test": "react-scripts test",
     "react-eject": "react-scripts eject",
     "start": "concurrently \"cross-env NODE_ENV=development BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build": "yarn react-build && electron-builder",
-    "release": "yarn react-build && electron-builder --publish=always"
+    "build": "yarn react-build",
+    "release": "yarn react-build && electron-builder --publish=always",
+
+    "build:osx": "electron-builder --mac",
+    "build:linux": "npm run build:linux32 && npm run build:linux64",
+    "build:linux32": "electron-builder --linux --ia32",
+    "build:linux64": "electron-builder --linux --x64",
+    "build:win": "npm run build:win32 && npm run build:win64",
+    "build:win32": "electron-builder --win --ia32",
+    "build:win64": "electron-builder --win --x64"
+  },
+  "build": {
+    "productName": "catchmuz",
+    "appId": "com.catchmuz.kyechan99",
+    "asar": true,
+    "mac": {
+      "target": [
+        "default"
+      ],
+      "icon": "build/icons/icon.icns"
+    },
+    "dmg": {
+      "title": "catchmuz",
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "perMachine": true,
+      "language": 1042,
+      "installerIcon": "build/icons/icon.ico",
+      "shortcutName": "catchmuz",
+      "artifactName": "catchmuz-${version}.${ext}",
+      "uninstallDisplayName": "catchmuz"
+    },
+    "directories": {
+      "buildResources": "./build/",
+      "output": "./dist/"
+    }
   },
   "eslintConfig": {
     "extends": [

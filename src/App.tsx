@@ -38,6 +38,7 @@ const App = () => {
 
   return (
     <div className="App">
+      <h1>App</h1>
       <Route path="/" component={Index} exact/>
       <Route path="/lobby" component={() =>
         <Lobby

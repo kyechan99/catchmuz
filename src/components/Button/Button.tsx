@@ -6,35 +6,39 @@ import { useHistory } from 'react-router-dom';
 
 type ButtonProps = {
     children? : React.ReactNode,
-    className? : string
-    clicked? : () => void
+    className? : string,
+    clicked? : () => void,
+    disabled? : boolean
 }
 
-export const Button = ({ children, className, clicked } : ButtonProps) => {
+export const Button = ({ children, className = '', clicked, disabled = false } : ButtonProps) => {
     return (
         <button 
-            className={`btn ${className}`}
+            className={`btn ${className} ${disabled ? 'disabled' : ''}`}
             onClick={ clicked }
+            disabled={ disabled }
         >
             { children }
         </button>
     )
 }
-export const PrimaryButton = ({ children, className, clicked } : ButtonProps) => {
+export const PrimaryButton = ({ children, className, clicked, disabled = false } : ButtonProps) => {
     return (
         <Button
             className={`btn-primary ${className}`}
             clicked={ clicked }
+            disabled={ disabled }
         >
             { children }
         </Button>
     )
 }
-export const PointButton = ({ children, className, clicked } : ButtonProps) => {
+export const PointButton = ({ children, className, clicked, disabled = false } : ButtonProps) => {
     return (
         <Button
             className={`btn-point ${className}`}
             clicked={ clicked }
+            disabled={ disabled }
         >
             { children }
         </Button>
