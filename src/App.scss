@@ -33,3 +33,27 @@ a {
 *, ::after, ::before {
 	box-sizing: border-box;
 }
+
+.warning {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: transparent;
+  .warning-modal {
+    position: fixed;
+    text-align: center;
+    padding: 2rem;
+    width: 100%;
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    .warning-head {
+  
+    }
+    .warning-desc {
+  
+    }
+  }
+}

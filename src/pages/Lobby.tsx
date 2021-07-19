@@ -41,11 +41,12 @@ const Lobby = ({ socket } : LobbyProps) => {
 
     // 받아온 데이터로 방 목록을 새로고침
     function refreshRoomList(data: any) {
+        console.log(data);
         setRoomList(data);
     }
 
     return (
-        <div className="container">            
+        <div className="container">
             <h1 className="lobby-title">로비</h1>
 
             <div className="lobby-menu">

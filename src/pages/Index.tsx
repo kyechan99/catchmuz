@@ -11,8 +11,11 @@ import { Profile } from '../components/Profile/Profile';
 
 import LogoImg from '../assets/catchmuz_logo.png';
 
+type IndexProps = {
+    client_version: string
+}
 
-const Index = () => {
+const Index = ({ client_version } : IndexProps ) => {
     const dispatch = useDispatch();
 
     const [ nickname, setNickname ] = React.useState('');
@@ -48,6 +51,8 @@ const Index = () => {
 
     return (
         <div className="index-page">
+            <p className="version">클라이언트 버전 : {client_version} </p>
+
             <img className="index-logo" src={LogoImg} alt="logo-img"/>
 
             <div className="index-input-profile">

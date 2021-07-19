@@ -15,7 +15,7 @@ export const Profile = ({ profileNum, children, className = '', color = 1 } : Pr
         >
             <img 
                 className="profile-img"
-                src={`/profile/profile_${profileNum}.png`}
+                src={ require(`../../assets/profile/profile_${profileNum}.png`).default }
                 alt={`profile_${profileNum}`}
             />
         </div>

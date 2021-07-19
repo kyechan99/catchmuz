@@ -243,6 +243,9 @@ const Room = ({ socket } : RoomProps) => {
         console.log('TAGS : ', roomSongTags);
     }
     function manager(tags: string[]) {
+        console.log('your manager');
+
+        
         setManager(true);
 
         setRoomSongTags(tags);
