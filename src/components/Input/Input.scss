@@ -20,6 +20,9 @@
     &::placeholder {
         color: rgba(255, 255, 255, 0.4);
     }
+    &.input-warning {
+        border: 3px solid $point;
+    }
 }
 
 .input-group {
@@ -30,9 +33,21 @@
     border-bottom: 1px solid #ffffff2b;
     margin-bottom: 1rem;
     width: 30rem;
+    &.input-warning {
+        .input-number {
+            background-color: $point;
+        }
+    }
     .input-label {
-        font-weight: 300    ;
+        font-weight: 300;
         font-size: 1.5rem;
+        .input-warning-msg {
+            margin-left: 1rem;
+            font-size: .75rem;
+            font-weight: 200;
+            // opacity: 1;
+            color: $point;
+        }
     }
     .input-number {
         // background: transparent;
@@ -41,7 +56,7 @@
         color: $primary;
         text-align: center;
         
-        background: #703ee5;
+        background: $primary;
         width: 5rem;
         color: white;
         padding: .25rem;

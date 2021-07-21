@@ -59,6 +59,8 @@
         padding: 0px;
         width: 8rem;
         height: 8rem;
+        border: none;
+        background-color: $bg-color;
         border-radius: 1rem;
         overflow: hidden;
         position: relative;
@@ -87,10 +89,25 @@
                         height ease .25s;
         }
     }
+    &.btn-skip {
+        padding: 0px;
+        position: absolute;
+        left: 15rem;
+        cursor: pointer;
+        opacity: .75;
+        transition: opacity ease .25s;
+        color: $secondary;
+        &:hover {
+            opacity: 1;
+        }
+    }
     &.disabled {
         cursor: not-allowed !important;
         background-color: $un-selected-color;
         opacity: .5;
+    }
+    .btn-icon {
+        fill: $secondary;
     }
 }
 

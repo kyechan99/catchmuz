@@ -16,3 +16,17 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.room-404 {
+    padding: 2rem;
+    border-radius: 1rem;
+    background: rgba( 255, 255, 255, 0.25 );
+    box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 4px );
+    -webkit-backdrop-filter: blur( 4px );
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
+    p {
+        font-weight: 300;
+    }
+}

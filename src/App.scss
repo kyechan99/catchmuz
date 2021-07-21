@@ -3,7 +3,28 @@
 body {
   background-color: $bg-color;
   font-family: 'Noto Sans KR', sans-serif;
+  animation: bg-effect 60s ease infinite;
+  animation-direction: reverse;
 }
+
+@keyframes bg-effect {
+  0% {
+    background-color: $bg-color;
+  }
+  25% {
+    background-color: #281a2b;
+  }
+  50% {
+    background-color: #1a232b;
+  }
+  75% {
+    background-color: #231820;
+  }
+  100% {
+    background-color: $bg-color;
+  }
+} 
+
 
 .App {
   color: white;
@@ -49,11 +70,31 @@ a {
     box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
     backdrop-filter: blur( 4px );
     -webkit-backdrop-filter: blur( 4px );
+    opacity: 0;
+    animation: fadeIn 1s linear 1;
+    animation-delay: 2s;
+    animation-fill-mode: forwards;
     .warning-head {
   
     }
     .warning-desc {
   
     }
+    .warning-help-url {
+      // margin-top: 2rem;
+      color: white;
+      padding: .25rem .5rem;
+      border-radius: .5rem;
+      background-color: $point;
+    }
   }
 }
+
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+} 

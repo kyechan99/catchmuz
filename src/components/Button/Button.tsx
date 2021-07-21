@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
 import './Button.scss';
 
 import { useHistory } from 'react-router-dom';
@@ -103,6 +102,29 @@ export const ImgButton = ({ children, clicked, src, isActive = false } : ImgButt
                 src={src}
                 alt="img-bt"
             />   
+        </Button>
+    )
+}
+
+type SkipButtonProps = {
+    className? : string,
+    children?: React.ReactNode,
+    clicked? : () => void
+}
+
+export const SkipButton = ({ children, clicked, className = '' } : SkipButtonProps) => {
+    return (
+        <Button
+            className={ className }
+            clicked={ clicked }
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16">
+                <path
+                    className="btn-icon"
+                    d="M8.46,8.29A1,1,0,1,0,7,9.71L9.34,12,7,14.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l3-3a1,1,0,0,0,0-1.42Zm8.5,3-3-3a1,1,0,0,0-1.42,1.42L14.84,12l-2.3,2.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0l3-3A1,1,0,0,0,17,11.29Z"
+                />
+            </svg>
+            { children }
         </Button>
     )
 }

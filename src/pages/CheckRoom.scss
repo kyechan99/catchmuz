@@ -1,0 +1,12 @@
+.check-room {
+    text-align: center;
+    padding: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .song-video {
+        margin-top: 3rem;
+        position: relative;
+        top: 0px;
+    }
+}

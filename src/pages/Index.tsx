@@ -60,12 +60,12 @@ const Index = ({ client_version } : IndexProps ) => {
                     <Profile profileNum={ profileNum } color={ colorNum }/>
                 </button>
                 <br/>
-                <InputNickname onChange={setNickname}></InputNickname>
+                <InputNickname onChange={setNickname} className={nickname.length > 10 ? 'input-warning' : ''} placeholder="닉네임 (최대 10글자)"></InputNickname>
             </div>
 
             <br/>
                         
-            <PrimaryButton clicked={goToLobby}>시작</PrimaryButton>
+            <PrimaryButton clicked={goToLobby} disabled={(nickname.replace(/\s/g, '') === '' || nickname.length > 10)}>시작</PrimaryButton>
         </div>
     )
 }

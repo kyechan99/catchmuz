@@ -62,7 +62,7 @@ const Lobby = ({ socket } : LobbyProps) => {
 
             <div className="room-list">
                 {
-                    roomList ?
+                    Object.keys(roomList).length > 0 ?
                     Object.keys(roomList).map((objectKey) => {
                         return <RoomMenu to={`/room/${objectKey}`} curMem={roomList[objectKey].curUserNum} maxMem={roomList[objectKey].maxUserNum} key={objectKey}>
                             {
@@ -71,7 +71,11 @@ const Lobby = ({ socket } : LobbyProps) => {
                         </RoomMenu>
                     })
                     :
-                    <p>생성된 방이 없습니다.</p>
+                    <div className="room-404">
+                        <h1>생성된 방이 없습니다.</h1>
+                        <p>방을 생성하고 초대해보세요 !</p>
+                        <p>새로고침 버튼을 이용해 방 목록을 다시 불러올 수 있습니다.</p>
+                    </div>
                 }
             </div>
         </div>
