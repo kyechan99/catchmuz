@@ -6,6 +6,8 @@ import './Room.scss';
 import { useSelector } from 'react-redux';
 import { RootState } from '../modules';
 
+import YouTube from '@u-wave/react-youtube';
+
 import { BeforeButton, PrimaryButton, SkipButton } from '../components/Button/Button';
 import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinner/Spinner';
 import { Chat, MyChat } from '../components/Chat/Chat';
@@ -82,6 +84,8 @@ const Room = ({ socket } : RoomProps) => {
     const [roomSongTags, setRoomSongTags] = React.useState<string[]>([]);
     // 스킵 희망 수
     const [skipCount, setSkipCount] = React.useState<number>(0);
+
+    const [volume, setVolume] = React.useState<number>(1);
 
     React.useEffect(() => {
         if (chatLogsRef.current) {
@@ -309,14 +313,22 @@ const Room = ({ socket } : RoomProps) => {
         <div className="container-fluid">
             {
                 (time > 0 && songData !== null) &&
-                <iframe 
-                    className="song-video"
+                <YouTube
                     id="player" 
-                    width="560" height="315"
-                    src={`https://www.youtube.com/embed/${songData?.code}?autoplay=1&start=${songData.start}`}
-                    title="YouTube video player" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                ></iframe>
+                    className="song-video"
+                    volume={volume}
+                    video={songData?.code}
+                    startSeconds={songData.start}
+                    showInfo={false}
+                    controls={false}
+                    annotations={false}
+                    modestBranding={true}
+                    disableKeyboard={true}
+                    allowFullscreen={false}
+                    showRelatedVideos={false}
+                    suggestedQuality={'small'}
+                    autoplay
+                />
             }
 
             <div className="row">
@@ -339,6 +351,19 @@ const Room = ({ socket } : RoomProps) => {
                             })
                         }
                     </div>
+
+                    <input
+                        type="range"
+                        className="input-range"
+                        min={0}
+                        max={1}
+                        step={0.02}
+                        value={volume}
+                        style={{background: `linear-gradient(to right, #7c4fe4 0%, #7c4fe4 ${(volume * 100)}%, #666666 ${(volume * 100)}%, #666666 100%)`}}
+                        onChange={event => {
+                            setVolume(event.target.valueAsNumber)
+                        }}
+                    />
                     
                     {
                         playedSong > 0 &&
