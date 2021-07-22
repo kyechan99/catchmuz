@@ -11,8 +11,9 @@ import CreateRoom from './pages/CreateRoom';
 import Room from './pages/Room';
 import CheckRoom from './pages/CheckRoom';
 
-const CLIENT_VERSION = 'v0.1.1';
-const socket = io('http://localhost:4000');
+const CLIENT_VERSION = 'v1.0.0';
+const server_host = process.env.REACT_APP_SERVER_HOST || "localhost:4000";
+const socket = io(server_host);
 // const socket = io('https://catch-muz.herokuapp.com');
 
 const App = () => {
@@ -44,7 +45,6 @@ const App = () => {
 
   return (
     <div className="App">
-      
       {
         serverVersion !== CLIENT_VERSION &&
         <div className="warning">
