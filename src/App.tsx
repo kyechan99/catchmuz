@@ -14,7 +14,6 @@ import CheckRoom from './pages/CheckRoom';
 const CLIENT_VERSION = 'v1.0.0';
 const server_host = process.env.REACT_APP_SERVER_HOST || "localhost:4000";
 const socket = io(server_host);
-// const socket = io('https://catch-muz.herokuapp.com');
 
 const App = () => {
   const dispatch = useDispatch();
@@ -52,6 +51,7 @@ const App = () => {
             serverVersion === '' ?
             <div className="warning-modal">
               <h1 className="warning-head">서버와 연결할 수 없습니다.</h1>
+              { server_host }
               <p className="warning-desc">서버가 닫혀 있습니다. 서버 관리자에게 문의하거나 직접 열어 플레이해보세요!</p>
               <a className="warning-help-url" href="https://github.com/kyechan99/catchmuz-server">서버 내가 열기</a>
             </div>
