@@ -50,14 +50,13 @@ const App = () => {
           {
             serverVersion === '' ?
             <div className="warning-modal">
-              <h1 className="warning-head">서버와 연결할 수 없습니다.</h1>
-              { server_host }
+              <h1 className="warning-head">⛔ 서버와 연결할 수 없습니다.</h1>
               <p className="warning-desc">서버가 닫혀 있습니다. 서버 관리자에게 문의하거나 직접 열어 플레이해보세요!</p>
               <a className="warning-help-url" href="https://github.com/kyechan99/catchmuz-server">서버 내가 열기</a>
             </div>
             :
             <div className="warning-modal">
-              <h1 className="warning-head">서버와 클라이언트의 버전이 다릅니다.</h1>
+              <h1 className="warning-head">⚠️ 서버와 클라이언트의 버전이 다릅니다.</h1>
               <p className="warning-desc">신규 버전의 클라이언트로 업데이트하거나 구 버전의 서버를 사용해주세요.</p>
               <a className="warning-help-url" href="https://github.com/kyechan99/catchmuz/releases">신규 버전 다운받기</a>
             </div>
@@ -67,7 +66,8 @@ const App = () => {
 
       <Route path="/" component={() => 
         <Index
-          client_version={CLIENT_VERSION}
+        client_version={CLIENT_VERSION}
+        server_version={serverVersion}
         />
       } exact/>
       <Route path="/lobby" component={() =>

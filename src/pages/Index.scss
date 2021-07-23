@@ -27,7 +27,12 @@
 .version {
     position: fixed;
     left: 1rem;
-    bottom: 0px;
     font-weight: 200;
     opacity: .5;
+    &.client-version {
+        bottom: 0px;
+    }
+    &.server-version {
+        bottom: 1.5rem;
+    }
 }

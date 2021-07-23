@@ -13,9 +13,10 @@ import LogoImg from '../assets/catchmuz_logo.png';
 
 type IndexProps = {
     client_version: string
+    server_version: string
 }
 
-const Index = ({ client_version } : IndexProps ) => {
+const Index = ({ client_version, server_version } : IndexProps ) => {
     const dispatch = useDispatch();
 
     const [ nickname, setNickname ] = React.useState('');
@@ -51,7 +52,8 @@ const Index = ({ client_version } : IndexProps ) => {
 
     return (
         <div className="index-page">
-            <p className="version">클라이언트 버전 : {client_version} </p>
+            <p className="version server-version">서버 버전 : {server_version === '' ? '( 연결 실패 )' : server_version} </p>
+            <p className="version client-version">클라이언트 버전 : {client_version} </p>
 
             <img className="index-logo" src={LogoImg} alt="logo-img"/>
 
