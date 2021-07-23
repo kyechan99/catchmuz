@@ -92,13 +92,17 @@
         .timer {
             margin: 0px;
             position: absolute;
-            font-size: 1rem;
+            font-size: 1.125rem;
             font-weight: 300;
             top: calc(50% + 3rem);
             white-space: nowrap;
             cursor: default;
             opacity: .5;
             z-index: $Z-ANSWER;
+            &.timer-alert {
+                animation: timerAlert 1s linear 1;
+                animation-fill-mode: forwards;
+            }
         }
     }
 
@@ -242,3 +246,13 @@ input[type="range"]::-ms-fill-lower {
 input[type="range"]::-ms-fill-upper {  
   background-color: $secondary;
 }
+
+
+@keyframes timerAlert {
+    0% {
+        font-size: 1.25rem;
+    }
+    100% {
+        font-size: 1rem;
+    }
+} 

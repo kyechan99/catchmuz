@@ -46,8 +46,8 @@ type SongType = {
     answer: string[]
 }
 
-const PLAY_TIME = 50;
-const WAITING_TIME = 10;
+const PLAY_TIME = 55;
+const WAITING_TIME = 5;
 
 const Room = ({ socket } : RoomProps) => {
     const history = useHistory();
@@ -392,7 +392,7 @@ const Room = ({ socket } : RoomProps) => {
                             <PrimaryButton 
                                 className="btn-start"
                                 clicked={() => socket.emit('game start', { roomCode: roomCode })}
-                                disabled={userList.length < 2}
+                                disabled={userList.length < 1}
                             >
                                 게임 시작
                             </PrimaryButton>
@@ -400,7 +400,7 @@ const Room = ({ socket } : RoomProps) => {
                         
                         <img className="play-icon" src={LogoImg} alt="logo-img"/>
                         
-                        <p className="timer">
+                        <p className={`timer${time <= WAITING_TIME ? ' timer-alert' : ''}`}>
                             {
                                 time !== 0 &&
                                 (time - WAITING_TIME > 0 ? 

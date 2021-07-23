@@ -159,8 +159,8 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
                     label="최대 인원 수"
                     value={maxUserNum}
                     onChange={setMaxUserNum}
-                    warning={maxUserNum > 10 || maxUserNum < 2}
-                    warningMsg={"2명 ~ 10명"}
+                    warning={maxUserNum > 10 || maxUserNum < 1}
+                    warningMsg={"1명 ~ 10명"}
                 ></InputGroup>
             </div>
 
@@ -260,7 +260,7 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
             </div>
             
             <div className="create-mng-list">
-                <PointButton disabled={ selectTags.length === 0 || maxUserNum < 2 || maxUserNum > 10 || maxSongNum > 1000 || maxSongNum < 2 } clicked={createRoom}>
+                <PointButton disabled={ selectTags.length === 0 || maxUserNum < 1 || maxUserNum > 10 || maxSongNum > 1000 || maxSongNum < 2 } clicked={createRoom}>
                     <svg className="create-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="#FFFFFF">
                         <path fillRule="evenodd" d="M1.5 8a6.5 6.5 0 1113 0 6.5 6.5 0 01-13 0zM0 8a8 8 0 1116 0A8 8 0 010 8zm11.78-1.72a.75.75 0 00-1.06-1.06L6.75 9.19 5.28 7.72a.75.75 0 00-1.06 1.06l2 2a.75.75 0 001.06 0l4.5-4.5z">
                         </path>
