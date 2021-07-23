@@ -44,6 +44,16 @@ const App = () => {
 
   return (
     <div className="App">
+      
+      {/* 
+        [아무 소리 들리자 않는 비디오]
+        모든 노래는 유투브 동영상으로 가져오기 때문에 키보드 fn 키 중 소리 조절 및 영상 일시 중지 등의 키가 모두 동작함
+        빈 비디오를 틀어 노래 정보가 유출되지 않도록 막아줌
+      */}
+      <video className="song-video" height="10" width="10" autoPlay loop poster="./logo192.png" >
+        <source src="/catch_muz.mp4" type="video/mp4"></source>
+      </video>
+      
       {
         serverVersion !== CLIENT_VERSION &&
         <div className="warning">
