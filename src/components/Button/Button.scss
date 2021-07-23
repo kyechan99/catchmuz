@@ -61,6 +61,12 @@
                 background-color: darken($primary, 5%);
             }
         }
+        &.tag-unselected {
+            background-color: $point;
+            &:not(:disabled):not(.disabled):hover {  
+                background-color: lighten($point, 5%);
+            }
+        }
     }
     &.btn-img {
         padding: 0px;

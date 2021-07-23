@@ -6,16 +6,18 @@ import { useHistory } from 'react-router-dom';
 type ButtonProps = {
     children? : React.ReactNode,
     className? : string,
-    clicked? : () => void,
+    clicked? : (e: any) => void,
     disabled? : boolean
+    onContextMenu? : any
 }
 
-export const Button = ({ children, className = '', clicked, disabled = false } : ButtonProps) => {
+export const Button = ({ children, className = '', clicked, onContextMenu, disabled = false } : ButtonProps) => {
     return (
         <button 
             className={`btn ${className} ${disabled ? 'disabled' : ''}`}
             onClick={ clicked }
             disabled={ disabled }
+            onContextMenu={ onContextMenu }
         >
             { children }
         </button>
@@ -80,15 +82,16 @@ export const BeforeButton = () => {
 }
 
 type TagButtonProps = {
-    children? : React.ReactNode,
-    clicked? : () => void,
+    children? : React.ReactNode
+    clicked : () => void
     isSelected : boolean
+    isUnSelected : boolean
 }
 
-export const TagButton = ({ children, clicked, isSelected } : TagButtonProps) => {
+export const TagButton = ({ children, clicked, isSelected, isUnSelected } : TagButtonProps) => {
     return (
         <Button
-            className={"btn-tag " + (isSelected && "tag-selected")}
+            className={"btn-tag" + (isSelected ? " tag-selected " : "") + (isUnSelected ? " tag-unselected " : "")}
             clicked={ clicked }
         >
             { children }   

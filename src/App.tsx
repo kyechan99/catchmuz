@@ -11,7 +11,7 @@ import CreateRoom from './pages/CreateRoom';
 import Room from './pages/Room';
 import CheckRoom from './pages/CheckRoom';
 
-const CLIENT_VERSION = 'v1.0.0';
+const CLIENT_VERSION = 'v1.0.1';
 const server_host = process.env.REACT_APP_SERVER_HOST || "localhost:4000";
 const socket = io(server_host);
 
@@ -44,7 +44,7 @@ const App = () => {
 
   return (
     <div className="App">
-      
+
       {/* 
         [아무 소리 들리자 않는 비디오]
         모든 노래는 유투브 동영상으로 가져오기 때문에 키보드 fn 키 중 소리 조절 및 영상 일시 중지 등의 키가 모두 동작함

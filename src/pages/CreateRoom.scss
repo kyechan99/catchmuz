@@ -52,6 +52,24 @@
     margin-bottom: .5rem;
 }
 
+.tag-help-desc {
+    margin-top: -2rem;
+    margin-bottom: 0px;
+    color: $secondary;
+    &.desc-2 {
+        margin-top: 0px;
+        margin-bottom: 1rem;
+    }
+    .help-primary {
+        color: $primary;
+        opacity: 1;
+    }
+    .help-point {
+        color: $point;
+        opacity: 1;
+    }
+}
+
 .tags-list {
     margin: 0 auto;
     display: flex;

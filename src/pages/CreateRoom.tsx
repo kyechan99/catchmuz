@@ -32,14 +32,14 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
         ],
         genre: [
             '발라드','힙합','싱잉랩','알앤비','록',
-            '포크','시티팝','국악','트로트','인디음악','영화ost','랩','케이팝','OST','가요'
+            '포크','시티팝','국악','트로트','인디','랩','케이팝','OST','가요'
         ],
         year: [
             '2021','2020','2019','2018','2017','2016','2015','2014','2013','2012','2011','2010','2008','2009','2007',
             '2006','2005','2004','2003','2002','2001','2000','1999',
         ],
         fast: [
-            '트렌드','최신곡','TOP100','추억의그노래','놀면뭐하니','유닛','감성','노래방','슈가맨프로젝트'
+            '트렌드','최신곡','TOP100','추억의그노래','놀면뭐하니','감성','노래방','슈가맨프로젝트'
         ]
     };
 
@@ -73,6 +73,9 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
     
     // 선택한 태그들 저장
     const [selectTags, setSelectTags] = React.useState<string[]>([ ]);
+    // 선택한 태그들 저장
+    const [unselectTags, setUnSelectTags] = React.useState<string[]>([ ]);
+
     // 언어권 지정
     const [language,  setLanguage] = React.useState<string>('kr');
     // 태그 타입 지정 - all, singer, genre, language, year, fast
@@ -96,12 +99,23 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
     //- tag - 선택한 태그 명
     //- 만약 선택한 태그라면 선택해제 | 미선택 태그라면 선택
     function selectTag(tag: string) {
-        if (!selectTags.includes(tag)) {
-            setSelectTags([...selectTags, tag]);
+        console.log('QQQQ');
+
+        // 이미 두번 눌러 제외였던 태그였다면 아무 상태 아님으로 변경
+        if (unselectTags.includes(tag)) {
+            setUnSelectTags(unselectTags.filter(item => item !== tag));
             return;
         }
 
-        setSelectTags(selectTags.filter(item => item !== tag));
+        // 이미 한번 누른 상태라면 두번 누른 상태인 제외 태그로 변경
+        if (selectTags.includes(tag)) {
+            setSelectTags(selectTags.filter(item => item !== tag));
+            setUnSelectTags([...unselectTags, tag]);
+            return;
+        }
+
+        // 한번도 누르지 않은 상태라면 해당 태그 추가함
+        setSelectTags([...selectTags, tag]);
     }
 
     // <태그 데이터들을 모두 묶어서 불러올때 사용>
@@ -116,6 +130,7 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
     function createRoom() {
         socket.emit('create room', {
             tags: selectTags,
+            unTags: unselectTags,
             language: language,
             maxSongNum: maxSongNum,
             maxUserNum: maxUserNum,
@@ -219,43 +234,47 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
 
                 {
                     isCustomMode && 
-                    <div className="tags-menu">
-                        <button 
-                            className={"btn-mode btn-sm " + (language !== 'kr' && " un-selected ")}
-                            onClick={()=>changeLanguage('kr')}
-                        >
-                            한국
-                        </button>
-                        <button 
-                            className={"btn-mode btn-sm " + (language !== 'en' && " un-selected ")}
-                            onClick={()=>changeLanguage('en')}
-                        >
-                            영어
-                        </button>
-                        <button 
-                            className={"btn-mode btn-sm " + (language !== 'jp' && " un-selected ")}
-                            onClick={()=>changeLanguage('jp')}
-                        >
-                            일본
-                        </button>
-                    </div>
-                }
-                
-                {
-                    isCustomMode && 
-                    <div className="tags-list">
-                        {
-                            getTags(getLanguageTags(language), tagType).map((tag: string) => 
-                                <TagButton 
-                                    clicked={() => selectTag(tag)}
-                                    isSelected={selectTags.includes(tag)}
-                                    key={tag}
-                                >
-                                    { tag }
-                                </TagButton>
-                            )
-                        }
-                    </div>
+                    <>
+                        <div className="tags-menu">
+                            <button 
+                                className={"btn-mode btn-sm " + (language !== 'kr' && " un-selected ")}
+                                onClick={()=>changeLanguage('kr')}
+                            >
+                                한국
+                            </button>
+                            <button 
+                                className={"btn-mode btn-sm " + (language !== 'en' && " un-selected ")}
+                                onClick={()=>changeLanguage('en')}
+                            >
+                                영어
+                            </button>
+                            <button 
+                                className={"btn-mode btn-sm " + (language !== 'jp' && " un-selected ")}
+                                onClick={()=>changeLanguage('jp')}
+                            >
+                                일본
+                            </button>
+                        </div>
+                        
+                        <p className="tag-help-desc"><strong>한번 선택</strong> : 해당 태그가 포합된 곡이 <span className="help-primary">추가</span>됩니다.</p>
+                        <p className="tag-help-desc desc-2"><strong>두번 선택</strong> : 추가한 곡 중 해당 태그가 포함된 곡을 <span className="help-point">제외</span>합니다.</p>
+
+
+                        <div className="tags-list">
+                            {
+                                getTags(getLanguageTags(language), tagType).map((tag: string) => 
+                                    <TagButton 
+                                        clicked={() => selectTag(tag)}
+                                        isSelected={selectTags.includes(tag)}
+                                        isUnSelected={unselectTags.includes(tag)}
+                                        key={tag}
+                                    >
+                                        { tag }
+                                    </TagButton>
+                                )
+                            }
+                        </div>
+                    </>
                 }
             </div>
             
