@@ -17,20 +17,6 @@
         &.remove-margin {
             top: 2rem;
         }
-        .player-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: .75rem;
-            .player-name {
-                font-weight: 300;
-                margin: 0rem 0rem 0rem .75rem;
-                opacity: .5;
-            }
-            .player-score {
-                font-weight: 500;
-                margin-left: .5rem;
-            }
-        }
     }  
 
     .remaining-songs {

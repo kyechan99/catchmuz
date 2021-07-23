@@ -13,37 +13,14 @@ import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinne
 import { Chat, MyChat } from '../components/Chat/Chat';
 import { Tag } from '../components/Tag/Tag';
 import { ProfileSM } from '../components/Profile/Profile'
+import { PlayerInfo } from '../components/PlayerInfo/PlayerInfo';
 
 import LogoImg from '../assets/catchmuz_icon.png';
 
+import { UserType, ChatType, SongType } from '../types/game';
+
 type RoomProps = {
     socket: Socket
-}
-
-type UserType = {
-    nickname: string
-    profile: number
-    color: number
-    socketId: string
-    answer: number 
-};
-
-type ChatType = {
-    msg: string
-    wantSkip?: boolean
-    socketId: string
-    author: string
-    profileNum: number
-    color: number
-    isAnswer: boolean
-}
-
-type SongType = {
-    name: string
-    code: string
-    start: number
-    tags: string[]
-    answer: string[]
 }
 
 const PLAY_TIME = 55;
@@ -84,8 +61,10 @@ const Room = ({ socket } : RoomProps) => {
     const [roomSongTags, setRoomSongTags] = React.useState<string[]>([]);
     // 스킵 희망 수
     const [skipCount, setSkipCount] = React.useState<number>(0);
-
+    // 소리 조절
     const [volume, setVolume] = React.useState<number>(1);
+    
+    const [memberInfo, setMemberInfo] = React.useState<string>('');
 
     React.useEffect(() => {
         if (chatLogsRef.current) {
@@ -248,6 +227,9 @@ const Room = ({ socket } : RoomProps) => {
     function forcedExit() {
         history.push('/lobby');
     }
+    function orderExitTarget(target : string) {
+        socket.emit('forced exit', { roomCode : roomCode,  target: target });
+    }
 
 
     //==== Chat Manager ===================================================================
@@ -340,14 +322,15 @@ const Room = ({ socket } : RoomProps) => {
 
                     <div className={`player-list ${ isPlaying ? 'remove-margin': '' }`}>
                         {
-                            userList.map((e) => {
-                                return  <div className="player-info" key={e.socketId}>
-                                            <ProfileSM profileNum={e.profile} color={e.color}></ProfileSM>
-                                            <p className="player-name">
-                                                {e.nickname}
-                                                <span className="player-score"> {e.answer} </span>
-                                            </p>
-                                        </div>
+                            userList.map((e : UserType) => {
+                                return <PlayerInfo 
+                                        isSelectMe={memberInfo === e.socketId}
+                                        isManager={isManager}
+                                        key={e.socketId} 
+                                        user={e}
+                                        selectUser={setMemberInfo}
+                                        clicked={orderExitTarget}
+                                        isMe={ user.socketId === e.socketId }></PlayerInfo>
                             })
                         }
                     </div>

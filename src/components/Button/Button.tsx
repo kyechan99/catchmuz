@@ -43,6 +43,17 @@ export const PointButton = ({ children, className, clicked, disabled = false } :
         </Button>
     )
 }
+export const SecondaaryButton = ({ children, className, clicked, disabled = false } : ButtonProps) => {
+    return (
+        <Button
+            className={`btn-secondary ${className}`}
+            clicked={ clicked }
+            disabled={ disabled }
+        >
+            { children }
+        </Button>
+    )
+}
 export const BeforeButton = () => {
     const history = useHistory();
     

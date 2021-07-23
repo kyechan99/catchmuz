@@ -23,6 +23,13 @@
             background-color: lighten($point, 5%);
         }
     }
+    &.btn-secondary {
+        color: white;
+        background-color: $secondary;
+        &:not(:disabled):not(.disabled):hover {            
+            background-color: lighten($secondary, 5%);
+        }
+    }
     &.btn-outline {
         color: $secondary;
         padding: 0rem .1rem;
