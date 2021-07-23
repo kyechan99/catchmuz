@@ -16,7 +16,7 @@
 
   <img src="https://img.shields.io/github/package-json/v/kyechan99/catchmuz?style=for-the-badge"/>
  <a href="https://github.com/kyechan99/catchmuz/releases">
- 	<img src="https://img.shields.io/badge/DOWNLOAD-HERE-%235f5fff?style=for-the-badge"/>
+ 	<img src="https://img.shields.io/badge/DOWNLOAD-HERE-%23f54787?style=for-the-badge"/>
  </a>
 </p>
 
