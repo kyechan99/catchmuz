@@ -52,6 +52,9 @@ $column-padding: 1rem;
 		max-width: $container-xl-width;
 	}
 }
+.container-box {
+    padding: 3rem 10rem 1rem 10rem;
+}
 // Grid
 @mixin base-column ($i) {
 	position: relative;

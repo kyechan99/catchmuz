@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './RoomMenu.scss';
+import './Notice.scss';
 
-type RoomMenuProps = {
+type NoticeMenuProps = {
     to: string
     children?: React.ReactNode
     curMem: number
@@ -10,20 +10,20 @@ type RoomMenuProps = {
     isPrimary: boolean
 }
 
-export const RoomMenu = ({ to, children, curMem, maxMem, isPrimary = false } : RoomMenuProps) => {
+export const NoticeMenu = ({ to, children, curMem, maxMem, isPrimary = false } : NoticeMenuProps) => {
     return (
         <Link
             to={ to }
         >
             <div
-                className={`room${isPrimary ? ' room-primary': ''}`}
+                className={`notice${isPrimary ? ' notice-primary': ''}`}
             >
                 <span
-                    className="room-title"
+                    className="notice-title"
                 >
                     { children }
                 </span>
-                <span className="room-member">
+                <span className="notice-member">
                     [ { curMem } / { maxMem } ]
                 </span>
             </div>

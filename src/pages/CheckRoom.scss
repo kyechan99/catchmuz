@@ -1,3 +1,5 @@
+@import '/src/_variables.scss';
+
 .check-room {
     text-align: center;
     padding: 5rem;
@@ -8,5 +10,25 @@
         margin-top: 3rem;
         position: relative;
         top: 0px;
+    }
+    h3 {
+        display: inline;
+        margin-right: 1.5rem;
+        text-align: left;
+        margin-bottom: 0px;
+    }
+    .copy-content {
+        margin-top: 1rem;
+        text-align: left;
+        background-color: $secondary;
+        padding: 1rem 1rem;
+        border-radius: 1rem;
+        pre {
+            margin: 0px;
+        }
+    }
+    p {
+        font-weight: 200;
+        margin: 0px;
     }
 }

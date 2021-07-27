@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import io from 'socket.io-client';
 import './App.scss';
@@ -8,12 +8,23 @@ import './_grid.scss';
 import Index from './pages/Index';
 import Lobby from './pages/Lobby';
 import CreateRoom from './pages/CreateRoom';
+import Setting from './pages/Setting';
 import Room from './pages/Room';
 import CheckRoom from './pages/CheckRoom';
 
 const CLIENT_VERSION = 'v1.0.1';
 const server_host = process.env.REACT_APP_SERVER_HOST || "localhost:4000";
 const socket = io(server_host);
+
+const NavBar = ({ path } : { path: string }) => {
+  return (
+    <div className="container navbar">
+        <Link className={`navbar-menu ${path==='/lobby' && 'active'}`}  to="/lobby">로비</Link>
+        <Link className={`navbar-menu ${path==='/setting' && 'active'}`}  to="/setting">설정</Link>
+    </div>
+
+  )
+}
 
 const App = () => {
   const dispatch = useDispatch();
@@ -81,9 +92,18 @@ const App = () => {
         />
       } exact/>
       <Route path="/lobby" component={() =>
-        <Lobby
-          socket={ socket }
-        />
+        <>
+          <NavBar path="/lobby" />
+          <Lobby
+            socket={ socket }
+          />
+        </>
+      }/>
+      <Route path="/setting" component={() =>
+        <>
+          <NavBar path="/setting" />
+          <Setting/>
+        </>
       }/>
       <Route path="/create" component={() => 
         <CreateRoom

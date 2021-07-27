@@ -1,6 +1,6 @@
 @import '/src/variables.scss';
 
-.room {
+.notice {
     padding: 2rem 1rem;
     background-color: $dark;
     margin-bottom: 1rem;
@@ -15,16 +15,16 @@
     &:hover {
         background: rgba( 255, 255, 255, 0.4 );
     }
-    &.room-primary {
+    &.notice-primary {
         background-color: $primary;
     }
-    .room-title {
+    .notice-title {
         font-weight: 200;
         margin: 0px;
         color: white;
         white-space: pre-wrap;
     }
-    .room-member {
+    .notice-member {
         font-size: .9rem;
         font-weight: 300;
         position: absolute;

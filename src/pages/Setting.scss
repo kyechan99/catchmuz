@@ -1,0 +1,23 @@
+@import '/src/_variables.scss';
+
+
+.setting-group {
+    margin-bottom: 3rem;
+    // border-bottom: 1px solid #ffffff33;
+    h1 {
+        padding-left: .25rem;
+        background-color: $un-selected-color;
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-bottom: .5rem;
+    }
+    p {
+        padding: .25rem;
+        margin-top: 0px;
+        margin-bottom: .25rem;
+        font-weight: 200;
+    }
+    .a {
+        color: $point;
+    }
+}

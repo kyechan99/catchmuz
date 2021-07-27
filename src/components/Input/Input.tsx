@@ -2,18 +2,29 @@ import React from 'react';
 import './Input.scss';
 
 type InputProps = {
-    onChange: (s: string) => void,
+    onChange: (e: any) => void,
     className?: string,
     placeholder?: string
 }
 
-export const InputNickname = ({ onChange, placeholder = '', className = '' } : InputProps) => {
+export const Input = ({ onChange, placeholder = '', className = '' } : InputProps) => {
     return (
         <input 
-            className={`input-nickname ${className}`} 
+            className={`input ${className}`} 
             onChange={(e) => { 
                 onChange(e.target.value);
             }}
+            placeholder={placeholder}
+        />
+    )
+}
+
+
+export const InputNickname = ({ onChange, placeholder = '', className = '' } : InputProps) => {
+    return (
+        <Input 
+            className={`input-nickname ${className}`} 
+            onChange={onChange}
             placeholder={placeholder}
         />
     )
