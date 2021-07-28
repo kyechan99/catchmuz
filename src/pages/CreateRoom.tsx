@@ -28,18 +28,18 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
     }
     const tags : TagsType = {
         singer: [
-            '남성 가수','여성 가수','남자 아이돌','여자 아이돌', '밴드',
+            '남성 가수', '여성 가수','남자 아이돌', '여자 아이돌', '밴드',
         ],
         genre: [
-            '발라드','힙합','싱잉랩','알앤비','록',
-            '포크','시티팝','국악','트로트','인디','랩','케이팝','OST','가요'
+            '발라드','힙합','랩','싱잉랩','알앤비','록',
+            '포크','시티팝','인디','케이팝','가요','국악','트로트'
         ],
         year: [
             '2021','2020','2019','2018','2017','2016','2015','2014','2013','2012','2011','2010','2008','2009','2007',
             '2006','2005','2004','2003','2002','2001','2000','1999',
         ],
         fast: [
-            '트렌드','최신곡','TOP100','추억의그노래','놀면뭐하니','감성','노래방','슈가맨프로젝트'
+            '트렌드','최신곡','TOP100','추억의그노래','놀면뭐하니','감성','노래방','슈가맨프로젝트','들어줬음해','OST', '쇼미더머니'
         ]
     };
 
@@ -185,6 +185,7 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
                         className={"btn-mode " + (isCustomMode && "un-selected")}
                         onClick={()=> {
                             setSelectTags([]);
+                            setUnSelectTags(["들어줬음해"]);
                             setCustomMode(false);
                         }}
                     >
@@ -194,6 +195,7 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
                         className={"btn-mode " + (!isCustomMode && "un-selected")}
                         onClick={()=> {
                             setSelectTags([]);
+                            setUnSelectTags(["들어줬음해"]);
                             setCustomMode(true);
                         }}
                     >
@@ -225,7 +227,7 @@ const CreateRoom = ({ socket } : CreateRoomProps) => {
                             src={BaladMode}>
                         </ImgButton>
                         <ImgButton
-                            clicked={()=> setSelectTags(['힙합'])}
+                            clicked={()=> setSelectTags(['힙합', "랩", "싱잉랩"])}
                             isActive={selectTags.includes('힙합')}
                             src={HiphopMode}>
                         </ImgButton>

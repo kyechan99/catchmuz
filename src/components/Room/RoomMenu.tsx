@@ -7,7 +7,7 @@ type RoomMenuProps = {
     children?: React.ReactNode
     curMem: number
     maxMem: number
-    isPrimary: boolean
+    isPrimary?: boolean
 }
 
 export const RoomMenu = ({ to, children, curMem, maxMem, isPrimary = false } : RoomMenuProps) => {

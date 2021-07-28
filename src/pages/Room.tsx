@@ -131,7 +131,6 @@ const Room = ({ socket } : RoomProps) => {
     function gameStart(data: any) {
         setPlayedSong(0);
         setSongLength(data.songLength);
-        setTime( 0 );
         setSongData(null);
         setAnswerUser('');
         setPlaying(true);
@@ -141,6 +140,11 @@ const Room = ({ socket } : RoomProps) => {
                 return e;
             })]
         );
+
+        // 게임 시작까지 대기 시간 출력, 0초가 되었을때 방장이 서버에게 다음 곡을 요청함
+        setTime( WAITING_TIME );
+        clearInterval(timeMng);
+        timeMng = setInterval(timeCounting, 1000);
     }
     function nextSong(data: SongType) {
         setSkipCount(0);
@@ -261,7 +265,7 @@ const Room = ({ socket } : RoomProps) => {
             setAnswerUser(data.author);
         }
 
-        setChatLogs(beforeChatLogs => [...(beforeChatLogs.length > 150 ? beforeChatLogs.slice(50) : beforeChatLogs), {
+        setChatLogs(beforeChatLogs => [...(beforeChatLogs.length > 15 ? beforeChatLogs.slice(5) : beforeChatLogs), {
             msg: data.msg,
             socketId: data.socketId,
             author: data.author,

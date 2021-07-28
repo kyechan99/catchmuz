@@ -45,6 +45,10 @@ $dot-space: 22px;
         color: white;
         font-size: 1.5rem;
         font-weight: 700;
+        transition: opacity ease .5s;
+        &:hover {
+            opacity: .8;
+        }
         &.btn-update {
             background:
                 linear-gradient(90deg, $primary ($dot-space - $dot-size), transparent 5%) center,
@@ -53,6 +57,7 @@ $dot-space: 22px;
             background-size: $dot-space $dot-space;
         }
         &.btn-help {
+            width: 100%;
             background-color: $un-selected-color;
             background:
                 linear-gradient(90deg, $un-selected-color ($dot-space - $dot-size), transparent 5%) center,
