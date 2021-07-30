@@ -1,0 +1,38 @@
+@import '/src/_variables.scss';
+
+.navbar {
+    padding-top: 2rem !important;
+    .navbar-menu {
+      font-size: 1.8rem;
+      margin-right: 1.5rem;
+      opacity: .4;
+      font-weight: 500;
+      &.active {
+        opacity: 1;
+        font-weight: 500;
+        position: relative;
+        &::before {
+          margin-top: -.5rem;
+          margin-left: calc(50% - .25rem);
+          position: absolute;
+          width: .5rem;
+          height: .5rem;
+          border-radius: .25rem;
+          content: " ";
+          white-space: pre;
+          background-color: #ffffffd7;
+        }
+      }
+    }
+    .connected-length {
+        float: right;
+        display: flex;
+        align-content: center;
+        align-items: center;
+        white-space: pre-wrap;
+        svg {
+            fill: white;
+            margin-right: 1rem;
+        }
+    }
+  }

@@ -123,14 +123,16 @@ export const ImgButton = ({ children, clicked, src, isActive = false } : ImgButt
 type SkipButtonProps = {
     className? : string,
     children?: React.ReactNode,
+    disabled? : boolean
     clicked? : () => void
 }
 
-export const SkipButton = ({ children, clicked, className = '' } : SkipButtonProps) => {
+export const SkipButton = ({ children, clicked, className = '', disabled = false } : SkipButtonProps) => {
     return (
         <Button
             className={ className }
             clicked={ clicked }
+            disabled={disabled}
         >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16">
                 <path

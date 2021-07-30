@@ -12,19 +12,12 @@ import Setting from './pages/Setting';
 import Room from './pages/Room';
 import CheckRoom from './pages/CheckRoom';
 
-const CLIENT_VERSION = 'v1.0.1';
+import { Navbar } from './components/Navbar/Navbar';
+
+const CLIENT_VERSION = 'v1.0.2';
 const server_host = process.env.REACT_APP_SERVER_HOST || "localhost:4000";
 const socket = io(server_host);
 
-const NavBar = ({ path } : { path: string }) => {
-  return (
-    <div className="container navbar">
-        <Link className={`navbar-menu ${path==='/lobby' && 'active'}`}  to="/lobby">로비</Link>
-        <Link className={`navbar-menu ${path==='/setting' && 'active'}`}  to="/setting">설정</Link>
-    </div>
-
-  )
-}
 
 const App = () => {
   const dispatch = useDispatch();
@@ -87,13 +80,12 @@ const App = () => {
 
       <Route path="/" component={() => 
         <Index
-        client_version={CLIENT_VERSION}
-        server_version={serverVersion}
+          client_version={CLIENT_VERSION}
+          server_version={serverVersion}
         />
       } exact/>
       <Route path="/lobby" component={() =>
         <>
-          <NavBar path="/lobby" />
           <Lobby
             socket={ socket }
           />
@@ -101,7 +93,6 @@ const App = () => {
       }/>
       <Route path="/setting" component={() =>
         <>
-          <NavBar path="/setting" />
           <Setting/>
         </>
       }/>
@@ -115,10 +106,7 @@ const App = () => {
           socket={ socket }
         />
       }/>
-      <Route path="/checkroom" component={() => 
-        <CheckRoom
-        />
-      }/>
+      <Route path="/checkroom" component={CheckRoom}/>
     </div>
   );
 }

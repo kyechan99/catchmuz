@@ -110,7 +110,7 @@
         opacity: .75;
         transition: opacity ease .25s;
         color: $secondary;
-        &:hover {
+        &:not(:disabled):not(.disabled):hover {
             opacity: 1;
         }
     }

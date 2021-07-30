@@ -5,6 +5,14 @@
     display: flex;
     position: relative;
     align-items: flex-start;
+    &.player-me::before {
+        font-family: monospace;
+        content: '>';
+        position: absolute;
+        left: -.75rem;
+        top: .5rem;
+        z-index: -1;
+    }
 }
 
 .player-info {

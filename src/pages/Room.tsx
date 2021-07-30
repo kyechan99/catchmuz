@@ -12,7 +12,6 @@ import { BeforeButton, PrimaryButton, SkipButton } from '../components/Button/Bu
 import { SpinnerSM, SpinnerMD, SpinnerLG, SpinnerXL } from '../components/Spinner/Spinner';
 import { Chat, MyChat } from '../components/Chat/Chat';
 import { Tag } from '../components/Tag/Tag';
-import { ProfileSM } from '../components/Profile/Profile'
 import { PlayerInfo } from '../components/PlayerInfo/PlayerInfo';
 
 import LogoImg from '../assets/catchmuz_icon.png';
@@ -61,6 +60,8 @@ const Room = ({ socket } : RoomProps) => {
     const [roomSongTags, setRoomSongTags] = React.useState<string[]>([]);
     // 스킵 희망 수
     const [skipCount, setSkipCount] = React.useState<number>(0);
+    // 내가 스킵을 눌렀는지
+    const [alreadySkip, setAlreadySkip] = React.useState<boolean>(false);
     // 소리 조절
     const [volume, setVolume] = React.useState<number>(1);
     
@@ -152,6 +153,7 @@ const Room = ({ socket } : RoomProps) => {
         setTime( PLAY_TIME + WAITING_TIME );
         setSongData(data);
         setAnswerUser('');
+        setAlreadySkip(false);
         clearInterval(timeMng);
         timeMng = setInterval(timeCounting, 1000);
     }
@@ -243,6 +245,9 @@ const Room = ({ socket } : RoomProps) => {
     function receiveChat(data: ChatType) {
         if (data.wantSkip) {
             setSkipCount(c => c+1);
+            if (data.socketId === user.socketId) {
+                setAlreadySkip(true);
+            }
         }
         if (data.isAnswer) {
             setUserList((beforeUserList) => {
@@ -397,8 +402,8 @@ const Room = ({ socket } : RoomProps) => {
                         </p>
     
                         {
-                            (isPlaying && time > WAITING_TIME) &&
-                            <SkipButton className={'btn-skip'} clicked={ () => sendChatData('!skip') }>
+                            (isPlaying && time > WAITING_TIME && time < PLAY_TIME + WAITING_TIME - 5) &&
+                            <SkipButton className={'btn-skip'} clicked={ () => sendChatData('!skip') } disabled={alreadySkip}>
                                 { skipCount } / { Math.ceil((userList.length + 1) / 2)}
                             </SkipButton>
                         }

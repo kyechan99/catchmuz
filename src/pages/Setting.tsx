@@ -3,12 +3,14 @@ import './Setting.scss';
 import { Button, PointButton } from '../components/Button/Button';
 import { RoomMenu } from '../components/Room/RoomMenu';
 import { Link } from 'react-router-dom';
+import { Navbar } from '../components/Navbar/Navbar';
 
 
 
 const Setting = ( ) => {
     return (
         <div className="container">
+            <Navbar path="/setting" />
             <div className="container-box">
                 <div className="setting-group">
                     <h1>그래픽</h1>

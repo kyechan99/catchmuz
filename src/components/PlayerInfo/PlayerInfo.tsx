@@ -18,34 +18,40 @@ type PlayerInfoProps = {
 
 export const PlayerInfo = ({ isSelectMe, selectUser, user, children, isManager, clicked, isMe } : PlayerInfoProps) => {
     return (
-        <div className="player">
-        <button className="player-info" onClick={ () => { if (!isMe) selectUser(before => { return before === user.socketId ? '' : user.socketId }) }}>
-            <ProfileSM profileNum={user.profile} color={user.color}></ProfileSM>
-            <p className="player-name">
-                {user.nickname}
-                <span className="player-score"> {user.answer} </span>
-            </p>
-        </button>
-        {
-            isSelectMe && 
-            <div className="player-detail">
-                {
-                    isManager ?
-                    <>
-                        <p className="detail-msg">강제 퇴장 시키겠습니까?</p>
-                        <div className="detail-menu">
-                            <PointButton clicked={ () => clicked(user.socketId) }>네</PointButton>
-                            <SecondaaryButton clicked={ () => selectUser('') }>취소</SecondaaryButton>
-                        </div>
-                    </>
-                    :
-                    <>
-                        <p className="detail-msg">강제 퇴장은 방장만 가능합니다.</p>
-                        <button className="btn-close-detail" onClick={ () => selectUser('') }>X</button>
-                    </>
-                }
-            </div>
-        }
+        <div className={`player ${ isMe ? 'player-me': ''}`}>
+            <button className="player-info" onClick={ () => { selectUser(before => { return before === user.socketId ? '' : user.socketId }) }}>
+                <ProfileSM profileNum={user.profile} color={user.color}></ProfileSM>
+                <p className="player-name">
+                    {user.nickname}
+                    <span className="player-score"> {user.answer} </span>
+                </p>
+            </button>
+            {
+                isSelectMe && 
+                <div className="player-detail">
+                    {
+                        isMe ?
+                        <>
+                            <p className="detail-msg">{ isManager ? '방장입니다' : '방장이아닙니다.' }</p>
+                            <button className="btn-close-detail" onClick={ () => selectUser('') }>X</button>
+                        </>
+                        :
+                        isManager ?
+                        <>
+                            <p className="detail-msg">강제 퇴장 시키겠습니까?</p>
+                            <div className="detail-menu">
+                                <PointButton clicked={ () => clicked(user.socketId) }>네</PointButton>
+                                <SecondaaryButton clicked={ () => selectUser('') }>취소</SecondaaryButton>
+                            </div>
+                        </>
+                        :
+                        <>
+                            <p className="detail-msg">강제 퇴장은 방장만 가능합니다.</p>
+                            <button className="btn-close-detail" onClick={ () => selectUser('') }>X</button>
+                        </>
+                    }
+                </div>
+            }
         </div>
     )
 }

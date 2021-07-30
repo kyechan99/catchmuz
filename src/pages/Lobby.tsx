@@ -5,6 +5,7 @@ import './Lobby.scss';
 
 import { Button, PointButton } from '../components/Button/Button';
 import { RoomMenu } from '../components/Room/RoomMenu';
+import { Navbar } from '../components/Navbar/Navbar';
 
 type LobbyProps = {
     socket: Socket
@@ -23,6 +24,7 @@ type RoomType = {
 
 const Lobby = ({ socket } : LobbyProps) => {
     const [roomList, setRoomList] = React.useState<RoomType>({});
+    const [clientsCount, setClientsCount] = React.useState<number>(1);
 
     React.useEffect(() => {
         getRoomList();
@@ -41,12 +43,13 @@ const Lobby = ({ socket } : LobbyProps) => {
 
     // 받아온 데이터로 방 목록을 새로고침
     function refreshRoomList(data: any) {
-        console.log(data);
-        setRoomList(data);
+        setClientsCount(data.clientsCount);
+        setRoomList(data.roomList);
     }
 
     return (
         <div className="container">
+            <Navbar path="/lobby" clientsCount={clientsCount} />
             {/* <div className="lobby-menu">
                 <Button clicked={getRoomList}>
                     새로고침
