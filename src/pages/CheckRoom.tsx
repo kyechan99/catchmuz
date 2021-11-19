@@ -1,7 +1,7 @@
 import React from 'react';
 import './CheckRoom.scss';
 
-import { BeforeButton } from '../components/Button/Button';
+import { HomeButton } from '../components/Button/Button';
 import { Input } from '../components/Input/Input';
 
 const Index = () => {
@@ -14,7 +14,7 @@ const Index = () => {
 
     return (
         <div className="container check-room">
-            <BeforeButton></BeforeButton>
+            <HomeButton></HomeButton>
 
             <div>
                 <h3>노래 제목 - 가수 명</h3>

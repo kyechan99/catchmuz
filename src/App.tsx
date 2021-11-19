@@ -14,7 +14,7 @@ import CheckRoom from './pages/CheckRoom';
 
 import { Navbar } from './components/Navbar/Navbar';
 
-const CLIENT_VERSION = 'v1.0.2';
+const CLIENT_VERSION = 'v1.0.3';
 const server_host = process.env.REACT_APP_SERVER_HOST || "localhost:4000";
 const socket = io(server_host);
 

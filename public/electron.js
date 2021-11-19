@@ -12,11 +12,15 @@ function createWindow () {
     height: 720,
     resizable: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      // 개발자용 도구 막기
+      devTools: false,
+      // window.require 허용
+      contextIsolation: false
     },
     icon: path.join(__dirname, './icons/icon.ico')
   });
-
+  
   mainWindow.loadURL(
     isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`
   );

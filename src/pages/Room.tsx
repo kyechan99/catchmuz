@@ -18,6 +18,14 @@ import LogoImg from '../assets/catchmuz_icon.png';
 
 import { UserType, ChatType, SongType } from '../types/game';
 
+// import Store  from 'electron-store';
+const Store = window.require('electron-store');
+const store = new Store({});
+
+if (!store.has('volume')) {
+    store.set('volume', 1);
+}
+
 type RoomProps = {
     socket: Socket
 }
@@ -63,7 +71,7 @@ const Room = ({ socket } : RoomProps) => {
     // 내가 스킵을 눌렀는지
     const [alreadySkip, setAlreadySkip] = React.useState<boolean>(false);
     // 소리 조절
-    const [volume, setVolume] = React.useState<number>(1);
+    const [volume, setVolume] = React.useState<number>(store.get('volume'));
     
     const [memberInfo, setMemberInfo] = React.useState<string>('');
 
@@ -353,7 +361,8 @@ const Room = ({ socket } : RoomProps) => {
                         value={volume}
                         style={{background: `linear-gradient(to right, #7c4fe4 0%, #7c4fe4 ${(volume * 100)}%, #666666 ${(volume * 100)}%, #666666 100%)`}}
                         onChange={event => {
-                            setVolume(event.target.valueAsNumber)
+                            setVolume(event.target.valueAsNumber);
+                            store.set('volume', event.target.valueAsNumber);
                         }}
                     />
                     
